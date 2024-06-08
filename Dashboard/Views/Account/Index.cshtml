@@ -1,0 +1,125 @@
+﻿@model IEnumerable<BusinessObject.Models.Account>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_Dashboard";
+}
+<style>
+    div.dataTables_filter input {
+        width: 1230px !important;
+    }
+</style>
+<!-- Page Heading -->
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h2 class="m-0 font-weight-bold text-black">USER MANAGEMENT</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr class="bg-gradient-primary">
+                                <th class="text-center">Order</th>
+                                <th class="text-center">Fullname</th>
+                                <th class="text-center">Email</th>
+                                <th class="text-center">Gender</th>
+                                <th class="text-center">BirthDay</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm ban account</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+
+                </button>
+            </div>
+            <div class="modal-body">Select "Ban" below if you are ready to ban this element.</div>
+
+            <div class="modal-footer">
+                <form method="post" id="deleteForm" action="/Account/Delete">
+                    <input type="hidden" id="accountIdInput" name="id" value="">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger" type="submit">Ban</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript" defer>
+        $(document).ready(function () {
+            var suc = "@TempData["SuccessMessage"]",
+            error = "@TempData["ErrorMessage"]";
+            if (suc) {
+                openSuccessModal(suc);
+            }
+
+            if (error) {
+                openErrorModal(error);
+            }
+            $('#dataTable').DataTable({
+                dom: "frtip",
+                language: {
+                    searchPlaceholder: "Search users",
+                    search: ""
+                },
+                "ajax": {
+                    "url": "/Account/GetData",
+                    "tye": "GET",
+                    "datatype": "json",
+                    
+                },
+                "columns": [
+                    { "data": "id", "className": "text-center" },
+                    { "data": "fullname", "className": "text-center" },
+                    { "data": "email", "className": "text-center" },
+                    { "data": "gender", "className": "text-center" },
+                    { "data": "dob", "className": "text-center" },
+                    { 
+                        "data": "status",
+                        "render": function (data, type, row) {
+                            if (row.status == 1) return '<i class="fa fa-smile-o text-success" aria-hidden="true" ></i>';
+                            if (row.status == 2) return '<i class="fa fa-frown-o text-danger" aria-hidden="true"></i>';
+                        },
+                        "className": "text-center",
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return '<div class="text-center action-buttons">' +
+                                '<a href="/Account/detail?id=' + data.id + '"class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-info"></i></a>' +
+                                '<a href="#" data-toggle="modal" data-target="#deleteModal" data-account-id="' + data.id + '" class="btn btn-danger btn-square delete-link"><i class="fa fa-times" aria-hidden="true"></i></a>'
+                                + '</div>';
+                        }
+                    }
+                    
+                ]
+            });
+            var table = $('#dataTable').DataTable();
+            //setInterval(function () {
+            //    table.ajax.reload();
+            //}, 3000);
+            // Lắng nghe sự kiện click trên nút "Delete"
+            $('#dataTable').on('click', '.delete-link', function () {
+                var threadId = $(this).data('account-id'); // Lấy AccountID từ data-account-id
+                // Sử dụng accountID trong popup hoặc thực hiện các thao tác khác
+                document.getElementById('accountIdInput').value = threadId;
+            });
+        });
+    </script>
+}

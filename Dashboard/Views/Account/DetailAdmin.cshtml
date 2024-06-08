@@ -1,0 +1,65 @@
+﻿@model BusinessObject.Models.Admin
+@{
+    ViewData["Title"] = "DetailAdmin";
+    Layout = "_Dashboard";
+
+}
+
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h2 class="m-0 font-weight-bold text-black">Detail</h2>
+            </div>
+            <div class="card-body ">
+                <div class="row">
+                    <div class="text-center">
+                        <img src="@ViewData["AvatarImg"]" alt="Avatar" style="height:300px; width:300px;">
+                    </div>
+                    <div class="col-lg-6">
+                        <form>
+                            <div class="mb-3">
+                                <label>Fullname </label>
+                                <br />
+                                <p>@Model.Fullname</p>
+                            </div>
+                            <div class="mb-3">
+                                <label>Email </label>
+                                <br />
+                                <p>@Model.Email</p>
+                            </div>
+                            <div class="mb-3">
+                                <label>Phone: </label>
+                                <br />
+                                <p>+84 @Model.Phone</p>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-6">
+                        <form>
+                            <div class="mb-3">
+                                <label>Gender </label>
+                                <br />
+                                <p>@Model.Gender</p>
+                            </div>
+                            <div class="mb-3">
+                                <label> Birthday </label>
+                                <br />
+                                <p>@Model.Dob</p>
+                            </div>
+                            <div class="mb-3">
+                                <label>Country </label>
+                                <br />
+                                <p>@Model.Country</p>
+                            </div>
+                        </form>
+                    </div>
+                    <a class="btn btn-danger" style="text-decoration:none; color: white" asp-action="Admins">Back to List</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+</div>

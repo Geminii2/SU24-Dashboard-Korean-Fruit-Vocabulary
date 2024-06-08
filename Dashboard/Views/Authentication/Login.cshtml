@@ -1,0 +1,74 @@
+﻿@model BusinessObject.Models.Admin
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_Profile";
+}
+<div class="container">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-12 col-md-9">
+            <div class="card o-hidden border border-dark my-5" style="box-shadow: 11px 10px 5px -2px rgba(0,0,0,0.3) !important;">
+                <div class="card-body p-0 ">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        <div class="col-lg-6 d-none d-lg-block "> <img src="~/images/bg-top.png" alt="background" class="w-100 h-100 object-fit-cover" /> </div>
+                        <div class="col-lg-6 ">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <img src="~/images/bo.png" alt="bo" width="100" height="100" />
+                                    <h1 class="h4 text-gray-900 mb-4"> <b><u>Welcome Back!</u></b></h1>
+                                </div>
+                                <form class="user" asp-controller="Authentication" asp-action="Login" method="post">
+                                    <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-user", placeholder = "Enter your Email", required = "required" })
+                                    </div>
+                                    <div class="input-group">
+                                        @Html.PasswordFor(model => model.Pwd, new { @class = "form-control form-control-user", id = "password", placeholder = "Enter your Password", required = "required" ,style = "border-right: none;" })
+                                        <span class="input-group-text" style="background: none; border-top-right-radius: 25px; border-bottom-right-radius: 25px; border-left: none;">
+                                            <i class="bi bi-eye-slash" id="togglePassword" style="cursor: pointer; background: no-repeat"></i>
+                                        </span>
+                                    </div>
+                                    <div style="margin-top:15px; margin-bottom:15px">
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
+                                    </div>
+                                    <div class="form-group text-ledt">
+                                        <div class="custom-control custom-checkbox small">
+                                            <input type="checkbox" class="custom-control-input" id="customCheck">
+                                            <label class="custom-control-label" for="customCheck">
+                                                Remember Me
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-user btn-block">Login</button>
+                                    <hr>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const passwordInput = document.getElementById("password");
+    const togglePasswordIcon = document.getElementById("togglePassword");
+
+    togglePasswordIcon.addEventListener("click", function () {
+        const type = passwordInput.type === "password" ? "text" : "password";
+        passwordInput.type = type;
+
+        // Toggle icon class based on password visibility
+        togglePasswordIcon.classList.toggle("bi-eye");
+    });
+
+    // Handle potential errors (e.g., missing elements)
+    if (!passwordInput || !togglePasswordIcon) {
+        console.error("Password input or toggle icon element not found.");
+    }
+
+</script>

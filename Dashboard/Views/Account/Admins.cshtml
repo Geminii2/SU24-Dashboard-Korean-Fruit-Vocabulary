@@ -1,0 +1,118 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "_Dashboard";
+}
+<style>
+    div.dataTables_filter input {
+        width: 1230px !important;
+    }
+</style>
+<!-- Page Heading -->
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h2 class="m-0 font-weight-bold text-black">ADMIN MANAGEMENT</h2>
+            </div>
+            <div class="col-md-10">
+                <a class="btn btn-primary text-right" asp-action="AddAdmin"> <i class="fa fa-plus" aria-hidden="true"></i></a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr class="">
+                                <th class="text-center">Order</th>
+                                <th class="text-center">Fullname</th>
+                                <th class="text-center">Email</th>
+                                <th class="text-center">Gender</th>
+                                <th class="text-center">BirthDay</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm ban account</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+
+                </button>
+            </div>
+            <div class="modal-body">Select "Delete" below if you are ready to delete this element.</div>
+
+            <div class="modal-footer">
+                <form method="post" id="deleteForm" action="/Account/DeleteAdmin">
+                    <input type="hidden" id="accountIdInput" name="id" value="">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" defer>
+        $(document).ready(function () {
+            var suc = "@TempData["SuccessMessage"]",
+                error = "@TempData["ErrorMessage"]";
+            if (suc) {
+                openSuccessModal(suc);
+            }
+
+            if (error) {
+                openErrorModal(error);
+            }
+            $('#dataTable').DataTable({
+                dom: "frtip",
+                language: {
+                    searchPlaceholder: "Search users",
+                    search: ""
+                },
+                "ajax": {
+                    "url": "/Account/GetDataAdmin",
+                    "tye": "GET",
+                    "datatype": "json",
+
+                },
+                "columns": [
+                    { "data": "id", "className": "text-center" },
+                    { "data": "fullname", "className": "text-center" },
+                    { "data": "email", "className": "text-center" },
+                    { "data": "gender", "className": "text-center" },
+                    { "data": "dob", "className": "text-center" },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return '<div class="text-center action-buttons">' +
+                                '<a href="/Account/EditAdmin?id='+ data.id +'" class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                                '<a href="/Account/DetailAdmin?id=' + data.id + '"class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
+                                '<a href="#" data-toggle="modal" data-target="#deleteModal" data-account-id="' + data.id + '" class="btn btn-danger btn-square delete-link"><i class="fa fa-times" aria-hidden="true"></i></a>'
+                                + '</div>';
+                        }
+                    }
+
+                ]
+            });
+            var table = $('#dataTable').DataTable();
+            //setInterval(function () {
+            //    table.ajax.reload();
+            //}, 3000);
+            // Lắng nghe sự kiện click trên nút "Delete"
+            $('#dataTable').on('click', '.delete-link', function () {
+                var threadId = $(this).data('account-id'); // Lấy AccountID từ data-account-id
+                // Sử dụng accountID trong popup hoặc thực hiện các thao tác khác
+                document.getElementById('accountIdInput').value = threadId;
+            });
+        });
+    </script>
+}

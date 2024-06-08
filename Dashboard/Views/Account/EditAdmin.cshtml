@@ -1,0 +1,55 @@
+﻿@model BusinessObject.Models.Admin
+@{
+    ViewData["Title"] = "EditAdmin";
+    Layout = "_Dashboard";
+
+}
+
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h2 class="m-0 font-weight-bold text-black">Edit</h2>
+            </div>
+            <div class="card-body ">
+                <div class="row">
+                    <div class="text-center">
+                        <img src="@ViewData["AvatarImg"]" alt="Avatar" style="height:300px; width:300px;">
+                    </div>
+                    <div class="col-md-6">
+                        <form asp-action="EditAdmin">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <input asp-for="Id" class="form-control" hidden />
+                                <input asp-for="Fullname" class="form-control" hidden />
+                                <input asp-for="Dob" class="form-control" hidden />
+                                <input asp-for="Country" class="form-control" hidden />
+                                <input asp-for="Phone" class="form-control" hidden />
+                                <input asp-for="Gender" class="form-control" hidden />
+                                <input asp-for="Avatar_img" class="form-control" hidden />
+                                <input asp-for="Role_id" class="form-control" hidden />
+                                <input asp-for="Status" class="form-control" hidden />
+                            </div>
+                            <div class="form-group">
+                                <label>Email: </label>
+                                <input asp-for="Email" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label>Password: </label>
+                                <input asp-for="Pwd" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Save" class="btn btn-primary" />
+                                <a class="btn btn-danger" style="text-decoration:none; color: white" asp-action="Admins">Back to List</a>
+                            </div>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+</div>

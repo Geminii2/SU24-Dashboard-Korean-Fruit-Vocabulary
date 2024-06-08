@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@if (ViewBag.AccountID != null)
+{
+    <p>Logged in as AccountID: @ViewBag.Id</p>
+}
+else
+{
+    <p>Not logged in</p>
+}

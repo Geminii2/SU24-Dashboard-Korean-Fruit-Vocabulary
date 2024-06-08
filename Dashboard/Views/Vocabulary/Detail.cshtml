@@ -1,0 +1,77 @@
+﻿@model BusinessObject.Models.Vocabulary
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "_Dashboard";
+
+}
+
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h2 class="m-0 font-weight-bold text-black">Detail</h2>
+            </div>
+            <div class="card-body ">
+                <div class="row">
+                    <div class="text-center">
+                        <img src="@ViewData["FruitImg"]" alt="Fruit" style="height:300px; width:300px;">
+                    </div>
+                    <div class="col-md-6">
+                        <form>
+                            <div class="mb-3">
+                                <label>Word - English </label>
+                                <br />
+                                <p>@Model.English</p>
+                            </div>
+                            <div class="mb-3">
+                                <label>Word - Vietnamese </label>
+                                <br />
+                                <p>@Model.Vietnamese</p>
+                            </div>
+                            <div class="mb-3">
+                                <label>Word - Korean </label>
+                                <br />
+                                <p>@Model.Korean</p>
+                            </div>
+                            <div class="mb-3">
+                                <label>Description - English </label>
+                                <br />
+                                <p>@Model.Example_EN</p>
+                            </div>
+                            <div class="mb-3">
+                                <label>Description - Vietnamese </label>
+                                <br />
+                                <p>@Model.Example_VN</p>
+                            </div>
+                            <div class="mb-3">
+                                <label>Description - Korean </label>
+                                <br />
+                                <p>@Model.Example_KR</p>
+                            </div>
+                            <div class="mb-3">
+                                <label>Sound</label>
+                             <br />
+                              ENG 
+                              <audio controls>
+                                     <source src="@Model.Voice_EN" type="audio/mpeg">
+                              </audio>
+                             <br />
+                              VIE 
+                               <audio controls>
+                                   <source src="@Model.Voice_VN" type="audio/mpeg">
+                              </audio>
+                                <br />
+                                 KOR 
+                               <audio controls>
+                                   <source src="@Model.Voice_KR" type="audio/mpeg">
+                               </audio>
+                            </div>
+                        </form>
+                    </div>
+                        <a class="btn btn-danger" style="text-decoration:none; color: white" asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

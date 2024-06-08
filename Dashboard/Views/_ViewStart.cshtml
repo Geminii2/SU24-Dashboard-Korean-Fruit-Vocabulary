@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "_Layout";
+    // Get the current URL
+    var currentUrl = Context.Request.Path;
+
+    // Check if the current URL is not the login URL
+    if (!currentUrl.Equals("/Authentication/Login", StringComparison.OrdinalIgnoreCase))
+    {
+        // Store the current URL in a cookie, excluding the /Authentication/Login URL
+        <script>
+            document.cookie = "returnUrl=" + encodeURIComponent("@currentUrl") + "; path=/";
+        </script>
+    }
+}

@@ -1,0 +1,71 @@
+﻿@model BusinessObject.Models.Vocabulary
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "_Dashboard";
+
+}
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h2 class="m-0 font-weight-bold text-black">Edit</h2>
+            </div>
+            <div class="card-body ">
+                <div class="row">
+                    <div>
+                        <form class="user" asp-controller="Vocabulary" asp-action="Edit" enctype="multipart/form-data">
+                            <label>Image</label>
+                            <div class="form-group">
+                                <input asp-for="Fruits_img" type="file" accept="image/*" name="imgFile" class="form-control" />
+                            </div>
+                            <label>Word - English</label>
+                            <div class="form-group">
+                                <input asp-for="English" class="form-control" />
+                            </div>
+                            <label>Word - Vietnamese</label>
+                            <div class="form-group">
+                                <input asp-for="Vietnamese" class="form-control" />
+                            </div>
+                            <label>Word - Korean</label>
+                            <div class="form-group">
+                                <input asp-for="Korean" class="form-control" />
+                            </div>
+                            <label>Spelling</label>
+                            <div class="form-group">
+                                <input asp-for="Spelling" class="form-control" />
+                            </div>
+                            <label>Description - English</label>
+                            <div class="form-group">
+                                <input asp-for="Example_EN" class="form-control" />
+                            </div>
+                            <label>Description - Vietnamese</label>
+                            <div class="form-group">
+                                <input asp-for="Example_VN" class="form-control" />
+                            </div>
+                            <label>Description - Korean</label>
+                            <div class="form-group">
+                                <input asp-for="Example_KR" class="form-control" />
+                            </div>
+                            <label>Sound</label>
+                            <div class="form-group">
+                                ENG <input asp-for="Voice_EN" type="file" accept="audio/mp3" name="voiceEngFile" class="form-control" />
+                                VIE <input asp-for="Voice_VN" type="file" accept="audio/mp3" name="voiceVieFile" class="form-control" />
+                                KOR <input asp-for="Voice_KR" type="file" accept="audio/mp3" name="voiceKorFile" class="form-control" />
+                            </div>
+                            <div style="margin-top:15px; margin-bottom:15px">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-user btn-block">
+                                Update Vocabulary
+                            </button>
+                        </form>
+                    </div>
+                    <a class="btn btn-danger" style="text-decoration:none; color: white" asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+</div>

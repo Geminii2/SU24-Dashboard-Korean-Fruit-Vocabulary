@@ -1,0 +1,50 @@
+﻿@model BusinessObject.Models.General_Feedback
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "_Dashboard";
+
+}
+
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h2 class="m-0 font-weight-bold text-black">Detail</h2>
+            </div>
+            <div class="card-body ">
+                <div class="row">
+                    <div class="text-center">
+                        <label>Email</label>
+                        <p>@ViewData["Email"]</p>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label>Type</label>
+                            <br />
+                            <p>@Model.Type</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label>Created</label>
+                            <br />
+                            <p>@Model.Created_date</p>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <label>Description</label>
+                        <p>@Model.Description</p>
+                    </div>
+                    <div class="text-center">
+                        <img src="@ViewData["Image"]" alt="Image" style="height:300px; width:300px;">
+                    </div>
+                    <a class="btn btn-danger" style="text-decoration:none; color: white" asp-controller="General_Feedback" asp-action="Index">Back to List</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+</div>

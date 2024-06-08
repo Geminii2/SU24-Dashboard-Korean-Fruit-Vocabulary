@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "_Dashboard";
+}
+<style>
+    div.dataTables_filter input {
+        width: 1230px !important;
+    }
+</style>
+<!-- Page Heading -->
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h2 class="m-0 font-weight-bold text-black">FEEDBACKS MANAGEMENT</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr class="">
+                                <th class="text-center">Order</th>
+                                <th class="text-center">Email</th>
+                                <th class="text-center">Type</th>
+                                <th class="text-center">Description</th>
+                                <th class="text-center">Created</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" defer>
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                dom: "frtip",
+                language: {
+                    searchPlaceholder: "Search feedback",
+                    search: ""
+                },
+                "ajax": {
+                    "url": "/General_Feedback/GetData",
+                    "tye": "GET",
+                    "datatype": "json",
+
+                },
+                "columns": [
+                    { "data": "id", "className": "text-center" },
+                    { "data": "email", "className": "text-center" },
+                    { "data": "type", "className": "text-center" },
+                    { "data": "description", "className": "text-center" },
+                    { "data": "created", "className": "text-center" },
+                    { "data": "status", "className": "text-center" },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return '<div class="text-center action-buttons">' +
+                                '<a href="/General_Feedback/Detail?id=' + data.id + '"class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
+                                '<a href="/General_Feedback/Edit?id=' + data.id + '" class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                                '</div>';
+                        }
+                    }
+
+                ]
+            });
+            var table = $('#dataTable').DataTable();
+            //setInterval(function () {
+            //    table.ajax.reload();
+            //}, 3000);
+            // Lắng nghe sự kiện click trên nút "Delete"
+        });
+    </script>
+}
