@@ -8,17 +8,6 @@
     div.dataTables_filter input {
         width: 1230px !important;
     }
-
-    desc {
-        width: 500px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 25px;
-        -webkit-line-clamp: 2;
-        height: 75px;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-    }
 </style>
 <!-- Page Heading -->
 <div class="container">
@@ -27,8 +16,9 @@
             <div class="card-header py-3">
                 <h2 class="m-0 font-weight-bold text-black">VOCABYLARY MANAGEMENT</h2>
             </div>
-            <div class="col-md-10">
+            <div class="d-flex justify-content-end input-group pr-4 pt-2 ">
                 <a class="btn btn-primary text-right" asp-action="Add"> <i class="fa fa-plus" aria-hidden="true"></i></a>
+                <a class="btn btn-secondary" asp-action="Add">New Vocabulary</a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -102,13 +92,21 @@
                     { "data": "english", "className": "text-center" },
                     { "data": "korean", "className": "text-center"},
                     { "data": "vietnamese", "className": "text-center"},
-                    { "data": "description", "className": "text-center" },
+                    { 
+                        "data": "description", 
+                        "render": function (data, type, row) 
+                        {
+                            return row.description.length > 50 ?
+                                `<p>${row.description.slice(0, 47)}...</p>` :
+                                `<p>${row.description}</p>`
+                        }
+                    },
                     {
                         "data": null,
                         "render": function (data, type, row) {
                             return '<div class="text-center action-buttons">' +
                                 '<a href="/Vocabulary/Edit?id=' + data.id + '" class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                                '<a href="/Vocabulary/Detail?id=' + data.id + '"class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
+                                '<a href="/Vocabulary/Detail?id=' + data.id + '"class="btn btn-success btn-square px-3 " style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
                                 '<a href="#" data-toggle="modal" data-target="#deleteModal" data-voca-id="' + data.id + '" class="btn btn-danger btn-square delete-link"><i class="fa fa-times" aria-hidden="true"></i></a>'
                                 + '</div>';
                         }

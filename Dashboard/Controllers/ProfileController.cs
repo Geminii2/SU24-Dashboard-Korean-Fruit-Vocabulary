@@ -46,7 +46,7 @@ namespace Dashboard.Controllers
         {
             try
             {
-                // Get the logged-in user's AccountID from the session
+                //Get the logged-in user's AccountID from the session
                 var accID = HttpContext.Session.GetInt32("Id");
 
                 if (accID == null)

@@ -8,61 +8,74 @@
 <div class="container">
     <main role="main" class="pb-3">
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
+            @* <div class="card-header py-3">
                 <h2 class="m-0 font-weight-bold text-black">Add</h2>
-            </div>
+            </div> *@
             <div class="card-body ">
                 <div class="row">
                     <div>
                         <form class="user" asp-controller="Vocabulary" asp-action="Add" enctype="multipart/form-data">
-                            <label>Image</label>
-                            <div class="form-group">
-                                <img id="output" style="height:300px; width:300px;" />
+                            <div class="text-center">
+                                <label>Image</label>
+                            </div>
+                            <div class="text-center">
+                                <img id="output" src="/images/bo-2.png" style="height:300px; width:300px;" />
                                 <input type="file" accept="image/*" name="imgFile" class="form-control" onchange="loadFile(event)">
                             </div>
                             <label>Word - English</label>
                             <div class="form-group">
-                                @Html.TextBoxFor(model => model.English, new { @class = "form-control form-control-user", placeholder = "Enter Word English", required = "required" })
+                                @Html.TextBoxFor(model => model.English, new { @class = "form-control ", placeholder = "Enter Word English", required = "required" })
                             </div>
                             <label>Word - Vietnamese</label>
                             <div class="form-group">
-                                @Html.TextBoxFor(model => model.Vietnamese, new { @class = "form-control form-control-user", placeholder = "Enter Word Vietnamese", required = "required" })
+                                @Html.TextBoxFor(model => model.Vietnamese, new { @class = "form-control ", placeholder = "Enter Word Vietnamese", required = "required" })
                             </div>
                             <label>Word - Korean</label>
                             <div class="form-group">
-                                @Html.TextBoxFor(model => model.Korean, new { @class = "form-control form-control-user", placeholder = "Enter Word Korean", required = "required" })
+                                @Html.TextBoxFor(model => model.Korean, new { @class = "form-control ", placeholder = "Enter Word Korean", required = "required" })
                             </div>
                             <label>Spelling</label>
                             <div class="form-group">
-                                @Html.TextBoxFor(model => model.Spelling, new { @class = "form-control form-control-user", placeholder = "Enter Spelling", required = "required" })
+                                @Html.TextBoxFor(model => model.Spelling, new { @class = "form-control ", placeholder = "Enter Spelling", required = "required" })
                             </div>
                             <label>Description - English</label>
                             <div class="form-group">
-                                @Html.TextBoxFor(model => model.Example_EN, new { @class = "form-control form-control-user", placeholder = "Enter Description English", required = "required" })
+                                @Html.TextAreaFor(model => model.Example_EN, new { @class = "form-control ", placeholder = "Enter Description English", required = "required" })
                             </div>
                             <label>Description - Vietnamese</label>
                             <div class="form-group">
-                                @Html.TextBoxFor(model => model.Example_VN, new { @class = "form-control form-control-user", placeholder = "Enter Description Vietnamese", required = "required" })
+                                @Html.TextAreaFor(model => model.Example_VN, new { @class = "form-control ", placeholder = "Enter Description Vietnamese", required = "required" })
                             </div>
                             <label>Description - Korean</label>
                             <div class="form-group">
-                                @Html.TextBoxFor(model => model.Example_KR, new { @class = "form-control form-control-user", placeholder = "Enter Description Korean", required = "required" })
+                                @Html.TextAreaFor(model => model.Example_KR, new { @class = "form-control ", placeholder = "Enter Description Korean", required = "required" })
                             </div>
-                            <label>Sound</label>
-                            <div class="form-group">
-                                ENG <input type="file" accept="audio/mp3" name="voiceEngFile" class="form-control" />
-                                VIE <input type="file" accept="audio/mp3" name="voiceVieFile" class="form-control" />
-                                KOR <input type="file" accept="audio/mp3" name="voiceKorFile" class="form-control" />
+                            <div class="row">
+                                <div class="col-md-3 d-flex justify-content-start align-items-center">
+                                    <label class="mt-4">Sound</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="d-flex ">
+                                        <p class="mt-2 mr-3 fw-bold">ENG</p>
+                                        <input type="file" accept="audio/mp3" name="voiceEngFile" class="form-control" />
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="mt-2 mr-4 fw-bold">VIE</p>
+                                        <input type="file" accept="audio/mp3" name="voiceVieFile" class="form-control" />
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="mt-2 mr-3 fw-bold">KOR</p>
+                                        <input type="file" accept="audio/mp3" name="voiceKorFile" class="form-control" />
+                                    </div>
+                                </div>
                             </div>
                             <div style="margin-top:15px; margin-bottom:15px">
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
                             </div>
-                            <button type="submit" class="btn btn-primary btn-user btn-block">
-                                Save
-                            </button>
+                            <button type="submit" class="btn btn-success btn-block" style=" text-decoration:none; color: white">Create New Vocabulary</button>
                         </form>
+                        <a class="btn btn-secondary btn-block" style="text-decoration:none; color: white" asp-action="Index">Close</a>
                     </div>
-                    <a class="btn btn-danger" style="text-decoration:none; color: white" asp-action="Index">Back to List</a>
                 </div>
             </div>
         </div>

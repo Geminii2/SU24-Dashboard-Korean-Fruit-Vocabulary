@@ -14,8 +14,9 @@
             <div class="card-header py-3">
                 <h2 class="m-0 font-weight-bold text-black">ADMIN MANAGEMENT</h2>
             </div>
-            <div class="col-md-10">
+            <div class="d-flex justify-content-end input-group pr-4 pt-2 ">
                 <a class="btn btn-primary text-right" asp-action="AddAdmin"> <i class="fa fa-plus" aria-hidden="true"></i></a>
+                <a class="btn btn-secondary" asp-action="AddAdmin">New Account</a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -47,7 +48,7 @@
 
                 </button>
             </div>
-            <div class="modal-body">Select "Delete" below if you are ready to delete this element.</div>
+            <div class="modal-body">Select "Ban" below if you are ready to ban this element.</div>
 
             <div class="modal-footer">
                 <form method="post" id="deleteForm" action="/Account/DeleteAdmin">
@@ -95,7 +96,7 @@
                         "render": function (data, type, row) {
                             return '<div class="text-center action-buttons">' +
                                 '<a href="/Account/EditAdmin?id='+ data.id +'" class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                                '<a href="/Account/DetailAdmin?id=' + data.id + '"class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
+                                '<a href="/Account/DetailAdmin?id=' + data.id + '"class="btn btn-success btn-square px-3" style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
                                 '<a href="#" data-toggle="modal" data-target="#deleteModal" data-account-id="' + data.id + '" class="btn btn-danger btn-square delete-link"><i class="fa fa-times" aria-hidden="true"></i></a>'
                                 + '</div>';
                         }

@@ -8,16 +8,26 @@
 <div class="container">
     <main role="main" class="pb-3">
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
+            @* <div class="card-header py-3">
                 <h2 class="m-0 font-weight-bold text-black">Edit</h2>
-            </div>
+            </div> *@
             <div class="card-body ">
                 <div class="row">
                     <div>
                         <form class="user" asp-controller="Vocabulary" asp-action="Edit" enctype="multipart/form-data">
-                            <label>Image</label>
-                            <div class="form-group">
-                                <input asp-for="Fruits_img" type="file" accept="image/*" name="imgFile" class="form-control" />
+                            <div class="text-center">
+                                <label>Image</label>
+                            </div>
+                            <div class="text-center">
+                                @if (Model.Fruits_img !="")
+                                {
+                                    <img id="output" src="@Model.Fruits_img" class="text-center" style="height:300px; width:300px;" />
+                                }
+                                else
+                                {
+                                    <img id="output" src="/images/bo-2.png" class="text-center" style="height:300px; width:300px;" />
+                                }
+                                <input type="file" accept="image/*" name="imgFile" class="form-control" onchange="loadFile(event)">
                             </div>
                             <label>Word - English</label>
                             <div class="form-group">
@@ -47,25 +57,46 @@
                             <div class="form-group">
                                 <input asp-for="Example_KR" class="form-control" />
                             </div>
-                            <label>Sound</label>
-                            <div class="form-group">
-                                ENG <input asp-for="Voice_EN" type="file" accept="audio/mp3" name="voiceEngFile" class="form-control" />
-                                VIE <input asp-for="Voice_VN" type="file" accept="audio/mp3" name="voiceVieFile" class="form-control" />
-                                KOR <input asp-for="Voice_KR" type="file" accept="audio/mp3" name="voiceKorFile" class="form-control" />
+                            <div class="row">
+                                <div class="col-md-3 d-flex justify-content-start align-items-center">
+                                    <label class="mt-4">Sound</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="d-flex ">
+                                        <p class="mt-2 mr-3 fw-bold">ENG</p>
+                                        <input value="@Model.Voice_EN" type="file" accept="audio/mp3" name="voiceEngFile" class="form-control" />
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="mt-2 mr-4 fw-bold">VIE</p>
+                                        <input value="@Model.Voice_VN" type="file" accept="audio/mp3" name="voiceVieFile" class="form-control" />
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="mt-2 mr-3 fw-bold">KOR</p>
+                                        <input value="@Model.Voice_KR" type="file" accept="audio/mp3" name="voiceKorFile" class="form-control" />
+                                    </div>
+                                </div>
                             </div>
                             <div style="margin-top:15px; margin-bottom:15px">
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
                             </div>
-                            <button type="submit" class="btn btn-primary btn-user btn-block">
-                                Update Vocabulary
-                            </button>
+                            <button type="submit" class="btn btn-info btn-block" style=" text-decoration:none; color: white">Update Vocabulary</button>
                         </form>
+                        <a class="btn btn-secondary btn-block" style="text-decoration:none; color: white" asp-action="Index">Close</a>
                     </div>
-                    <a class="btn btn-danger" style="text-decoration:none; color: white" asp-action="Index">Back to List</a>
                 </div>
             </div>
         </div>
     </main>
-
-
 </div>
+
+
+<script>
+    var loadFile = function (event) {
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+
+</script>

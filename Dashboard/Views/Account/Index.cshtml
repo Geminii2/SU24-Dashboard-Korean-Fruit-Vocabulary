@@ -8,6 +8,7 @@
     div.dataTables_filter input {
         width: 1230px !important;
     }
+
 </style>
 <!-- Page Heading -->
 <div class="container">
@@ -102,7 +103,7 @@
                         "data": null,
                         "render": function (data, type, row) {
                             return '<div class="text-center action-buttons">' +
-                                '<a href="/Account/detail?id=' + data.id + '"class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-info"></i></a>' +
+                                '<a href="/Account/detail?id=' + data.id + '"class="btn btn-success btn-square px-3 " style="margin-right: 8px"><i class="fa fa-info"></i></a>' +
                                 '<a href="#" data-toggle="modal" data-target="#deleteModal" data-account-id="' + data.id + '" class="btn btn-danger btn-square delete-link"><i class="fa fa-times" aria-hidden="true"></i></a>'
                                 + '</div>';
                         }
