@@ -15,5 +15,6 @@ namespace BusinessObject.Models
         public string? Image {  get; set; }
         public string? Created_date { get; set; }
         public int Status { get; set; }
+
     }
 }

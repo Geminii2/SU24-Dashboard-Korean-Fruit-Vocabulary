@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,14 +10,18 @@ namespace BusinessObject.Models
     public class Admin
     {
         public Admin() { }
-        public Admin(int _Id, string _Email, string _Pwd, string _Avatar_img, string _Fullname) 
+        public Admin(int _Id, string _Email, string _Pwd, string _Fullname) 
         {
             Id = _Id;
             Email = _Email;
             Pwd = _Pwd;
             Role_id = 2;
-            Avatar_img = _Avatar_img;
             Fullname= _Fullname;
+            Avatar_img = "";
+            Dob="";
+            Country="";
+            Gender ="";
+            Status= 1;
         }
         public int Id { get; set; }
         public int Role_id { get; set; }

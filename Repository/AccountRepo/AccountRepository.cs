@@ -1,6 +1,8 @@
-﻿using BusinessObject.Models;
+﻿using BusinessObject;
+using BusinessObject.Models;
 using DataAccess;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,5 +36,6 @@ namespace Repository.AccountRepo
         public async Task DeleteAdmin(Admin ad) => await AccountDAO.GetInstance.SaveDataAd(ad);
         public async Task UpdateAdmin(Admin ad) => await AccountDAO.GetInstance.SaveDataAd(ad);
         public async Task UpdateFirebasePassword(string email, string pwd) => await AccountDAO.GetInstance.UpdateFirebasePassword(email, pwd);
+
     }
 }

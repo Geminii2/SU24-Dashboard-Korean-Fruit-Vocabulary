@@ -9,24 +9,28 @@
     <main role="main" class="pb-3">
         <div class="card shadow mb-4">
             @* <div class="card-header py-3">
-                <h2 class="m-0 font-weight-bold text-black">Add Admin</h2>
+            <h2 class="m-0 font-weight-bold text-black">Add Admin</h2>
             </div> *@
             <div class="card-body ">
                 <div class="row">
                     <div>
-                        <form class="user" asp-controller="Account" asp-action="AddAdmin">
-                            <label>Email</label>
+                        <form class="user" asp-controller="Account" asp-action="ChangePwd" >
                             <div class="form-group">
-                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control ", placeholder = "Enter Email", required = "required", type = "email" })
+                                <label for="currentPassword">Current Password:</label>
+                                <input type="password" id="currentPassword" name="currentPassword" class="form-control" required />
                             </div>
-                            <label>Fullname</label>
                             <div class="form-group">
-                                @Html.TextBoxFor(model => model.Fullname, new { @class = "form-control ", placeholder = "Enter full name", required = "required" })
+                                <label for="newPassword">New Password:</label>
+                                <input type="password" id="newPassword" name="newPassword" class="form-control" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password:</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required />
                             </div>
                             <div style="margin-top:15px; margin-bottom:15px">
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
                             </div>
-                            <button type="submit" class="btn btn-success btn-block" style=" text-decoration:none; color: white">Create New Account</button>
+                            <button type="submit" class="btn btn-success btn-block" style=" text-decoration:none; color: white">Save</button>
                         </form>
                         <a class="btn btn-secondary btn-block" style="text-decoration:none; color: white" asp-action="Admins">Close</a>
                     </div>
@@ -34,6 +38,4 @@
             </div>
         </div>
     </main>
-
-
 </div>

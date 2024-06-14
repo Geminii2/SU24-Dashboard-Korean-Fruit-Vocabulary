@@ -110,9 +110,9 @@
             //}, 3000);
             // Lắng nghe sự kiện click trên nút "Delete"
             $('#dataTable').on('click', '.delete-link', function () {
-                var threadId = $(this).data('account-id'); // Lấy AccountID từ data-account-id
+                var accId = $(this).data('account-id'); // Lấy AccountID từ data-account-id
                 // Sử dụng accountID trong popup hoặc thực hiện các thao tác khác
-                document.getElementById('accountIdInput').value = threadId;
+                document.getElementById('accountIdInput').value = accId;
             });
         });
     </script>

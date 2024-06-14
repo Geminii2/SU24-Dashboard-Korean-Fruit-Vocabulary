@@ -61,12 +61,35 @@
                             </div>
                         </form>
                     </div>
+                    <a href="#" data-toggle="modal" data-target="#resetModal" data-account-id="@Model.Id" class="btn btn-info">Reset Password</a>
                     <a class="btn btn-secondary" style="text-decoration:none; color: white" asp-action="Admins">Close</a>
                 </div>
             </div>
 
         </div>
     </main>
-
-
 </div>
+
+<div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="resetModalLabel">Confirm ban account</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+
+                </button>
+            </div>
+            <div class="modal-body">Select "Reset" below if you are ready to reset password to default.</div>
+
+            <div class="modal-footer">
+                <form method="post" id="resetForm" action="/Account/ResetPasswordDefault">
+                    <input type="hidden"  name="id" value="@Model.Id">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger" type="submit">Reset</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
