@@ -1,0 +1,56 @@
+﻿@model BusinessObject.Models.General_Feedback
+
+@{
+    ViewData["Title"] = "Reply";
+    Layout = "_Dashboard";
+
+}
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="card shadow mb-4">
+            @* <div class="card-header py-3">
+            <h2 class="m-0 font-weight-bold text-black">Add Admin</h2>
+            </div> *@
+            <div class="card-body ">
+                <div class="row">
+                    <div>
+                        <form class="user" asp-controller="General_Feedback" asp-action="Reply">
+                            <input asp-for="Id" type="hidden"/>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input value="@ViewData["Email"]" name="email" readonly class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input value="@ViewData["Fullname"]" name="name" readonly class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input name="title" class="form-control" charset="utf-8" />
+                            </div>
+                            <div class="form-group">
+                                <label>Body</label>
+                                <textarea id="rtxBlogContent" name="body" class="form-control" charset="utf-8"></textarea>
+                            </div>
+
+                            <div style="margin-top:15px; margin-bottom:15px">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block" style=" text-decoration:none; color: white">Reply</button>
+                        </form>
+                        <a class="btn btn-secondary btn-block" style="text-decoration:none; color: white" asp-action="Index">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+@section scripts {
+    <script src="~/lib/ckeditor/ckeditor.js"></script>
+    <script src="~/lib/ckeditor/adapters/jquery.js"></script>
+    <script>
+        $("#rtxBlogContent").ckeditor();
+
+    </script>
+}

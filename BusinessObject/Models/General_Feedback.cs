@@ -8,12 +8,13 @@ namespace BusinessObject.Models
 {
     public class General_Feedback
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public int Account_Id { get; set; }
-        public int Type { get; set; }
+        public string Type { get; set; }
         public string? Description { get; set; }
         public string? Image { get; set; }
         public string? Created_date { get; set; }
         public int Status { get; set; }
+
     }
 }

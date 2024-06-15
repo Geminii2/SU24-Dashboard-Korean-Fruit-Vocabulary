@@ -1,5 +1,7 @@
+using BusinessObject;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using MailKit;
 using Repository.AccountRepo;
 using Repository.Feedback_VocaRepo;
 using Repository.General_FeedbackRepo;
@@ -16,6 +18,10 @@ builder.Services.AddScoped<IVocabularyRepository, VocabularyRepository>();
 builder.Services.AddScoped<IFeedback_VocaRepository, Feedback_VocaRepository>();
 builder.Services.AddScoped<IGeneral_FeedbackRepository, General_FeedbackRepository>();
 builder.Services.AddDistributedMemoryCache();
+//load thông tin c?u hình và l?u vào ??i t??ng MailSetting
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+//add dependency inject cho MailService
+//builder.Services.AddTransient<IMailService, MailService>();
 
 builder.Services.AddSession(options =>
 {

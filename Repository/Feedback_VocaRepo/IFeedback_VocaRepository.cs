@@ -10,6 +10,7 @@ namespace Repository.Feedback_VocaRepo
     public interface IFeedback_VocaRepository
     {
         Task<IEnumerable<Feedback_Voca>> GetAll();
-        Task<Feedback_Voca> GetById(int id);
+        Task<Feedback_Voca> GetById(string id);
+        Task UpdateVoca(Feedback_Voca fb_voca);
     }
 }

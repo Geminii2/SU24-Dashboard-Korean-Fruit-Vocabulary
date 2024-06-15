@@ -56,7 +56,35 @@ namespace DataAccess
                 return list;
             }
         }
-
+        public async Task<List<T>> GetAllString<T>(string databaseURL)
+        {
+            var content = await GetContent(databaseURL);
+            if (CheckJson(content) == true)
+            {
+                var objects = JsonConvert.DeserializeObject<List<T>>(content);
+                if (objects == null)
+                {
+                    return new List<T>();
+                }
+                var list = new List<T>();
+                foreach (var item in objects)
+                {
+                    if (item != null)
+                        list.Add(item);
+                }
+                return list;
+            }
+            else
+            {
+                var objects = JsonConvert.DeserializeObject<Dictionary<string, T>>(content);
+                if (objects == null)
+                {
+                    return new List<T>();
+                }
+                var list = objects.Values.ToList();
+                return list;
+            }
+        }
         public async Task<int> IncreaseId<T>(string databaseURL, string idPropertyName)
         {
             var content = await GetContent(databaseURL);

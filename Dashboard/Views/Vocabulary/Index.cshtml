@@ -26,9 +26,9 @@
                         <thead>
                             <tr class="">
                                 <th class="text-center">Order</th>
-                                <th class="text-center">English Name</th>
-                                <th class="text-center">Korean Name</th>
-                                <th class="text-center">Vietnamese Name</th>
+                                <th class="text-center">English</th>
+                                <th class="text-center">Korean</th>
+                                <th class="text-center">Vietnamese</th>
                                 <th class="text-center">Description</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -66,6 +66,7 @@
 @section Scripts {
     <script type="text/javascript" defer>
         $(document).ready(function () {
+            var stt = 1;
             var suc = "@TempData["SuccessMessage"]",
                 error = "@TempData["ErrorMessage"]";
             if (suc) {
@@ -88,14 +89,19 @@
 
                 },
                 "columns": [
-                    { "data": "id", "className": "text-center" },   
-                    { "data": "english", "className": "text-center" },
-                    { "data": "korean", "className": "text-center"},
-                    { "data": "vietnamese", "className": "text-center"},
-                    { 
-                        "data": "description", 
-                        "render": function (data, type, row) 
-                        {
+                    {
+                        "data": "id",
+                        "render": function (data, type, row) {
+                            return stt++;
+                        },
+                        "className": "text-center"
+                    },
+                    { "data": "english" },
+                    { "data": "korean" },
+                    { "data": "vietnamese" },
+                    {
+                        "data": "description",
+                        "render": function (data, type, row) {
                             return row.description.length > 50 ?
                                 `<p>${row.description.slice(0, 47)}...</p>` :
                                 `<p>${row.description}</p>`

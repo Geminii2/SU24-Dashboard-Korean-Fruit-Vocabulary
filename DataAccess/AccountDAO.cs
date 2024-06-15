@@ -155,7 +155,7 @@ namespace DataAccess
                 if (account != null)
                 {
                     // Assuming the Account class has an Avatarlink property
-                    return account.Avatar_img;
+                    return account.Avatar;
                 }
             }
             catch (Exception ex)
@@ -235,5 +235,6 @@ namespace DataAccess
                 // Handle Firebase Authentication exception as needed
             }
         }
+        
     }
 }

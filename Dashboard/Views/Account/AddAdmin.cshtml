@@ -14,14 +14,7 @@
             <div class="card-body ">
                 <div class="row">
                     <div>
-                        <form class="user" asp-controller="Account" asp-action="AddAdmin" enctype="multipart/form-data">
-                            <div class ="text-center">
-                                <label >Avartar</label>
-                            </div>
-                            <div class="text-center">
-                                 <img id="output" src="/images/bo-2.png" class="text-center" style="height:300px; width:300px;" />
-                                <input type="file" accept="image/*" name="imgFile" class="form-control" onchange="loadFile(event)">
-                            </div>
+                        <form class="user" asp-controller="Account" asp-action="AddAdmin">
                             <label>Email</label>
                             <div class="form-group">
                                 @Html.TextBoxFor(model => model.Email, new { @class = "form-control ", placeholder = "Enter Email", required = "required", type = "email" })
@@ -29,10 +22,6 @@
                             <label>Fullname</label>
                             <div class="form-group">
                                 @Html.TextBoxFor(model => model.Fullname, new { @class = "form-control ", placeholder = "Enter full name", required = "required" })
-                            </div>
-                            <label>Password</label>
-                            <div class="form-group">
-                                @Html.TextBoxFor(model => model.Pwd, new { @class = "form-control ", placeholder = "Enter Password", required = "required" })
                             </div>
                             <div style="margin-top:15px; margin-bottom:15px">
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
@@ -48,13 +37,3 @@
 
 
 </div>
-<script>
-    var loadFile = function (event) {
-        var output = document.getElementById('output');
-        output.src = URL.createObjectURL(event.target.files[0]);
-        output.onload = function () {
-            URL.revokeObjectURL(output.src) // free memory
-        }
-    };
-
-</script>

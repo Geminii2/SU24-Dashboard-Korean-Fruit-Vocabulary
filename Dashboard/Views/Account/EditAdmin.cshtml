@@ -13,23 +13,11 @@
             </div> *@
             <div class="card-body ">
                 <div class="row">
-                    <div class="text-center">
-                        @if (Model.Avatar_img != null)
-                        {
-                            <img src="@Model.Avatar_img" alt="Avatar" style="height:300px; width:300px;">
-
-                        }
-                        else
-                        {
-                            <img src="/images/bo-2.png" alt="Avatar" style="height:300px; width:300px;">
-                        }
-                    </div>
                     <div class="row">
                         <form asp-action="EditAdmin">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="mb-3">
                                 <input asp-for="Id" class="form-control" hidden />
-                                <input asp-for="Fullname" class="form-control" hidden />
                                 <input asp-for="Dob" class="form-control" hidden />
                                 <input asp-for="Country" class="form-control" hidden />
                                 <input asp-for="Phone" class="form-control" hidden />
@@ -43,8 +31,8 @@
                                 <input asp-for="Email" class="form-control" />
                             </div>
                             <div class="mb-3">
-                                <label>Password: </label>
-                                <input asp-for="Pwd" class="form-control" />
+                                <label>Fullname: </label>
+                                <input asp-for="Fullname" class="form-control" />
                             </div>
                             <button type="submit" class="btn btn-primary btn-block" style=" text-decoration:none; color: white">Save</button>
                             <button class="btn btn-secondary btn-block" style="text-decoration:none; color: white" asp-action="Admins">Close</button>

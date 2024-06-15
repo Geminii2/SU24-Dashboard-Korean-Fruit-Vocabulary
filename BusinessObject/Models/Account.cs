@@ -16,7 +16,7 @@ namespace BusinessObject.Models
         public string? Gender { get; set; }
         public string? Country { get; set; }
         public int Status { get; set; }
-        public string? Avatar_img { get; set; }
-        
+        public string? Avatar { get; set; }
+        public string Created_date { get; set; }
     }
 }

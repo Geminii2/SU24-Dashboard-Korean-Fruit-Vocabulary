@@ -1,7 +1,12 @@
-﻿using BusinessObject.Models;
+﻿using BusinessObject;
+using BusinessObject.Models;
 using Firebase.Auth;
 using FirebaseAdmin.Auth;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using MimeKit;
+using Org.BouncyCastle.Asn1.Pkcs;
 using Repository.AccountRepo;
 using System.Net.Sockets;
 using System.Security.Principal;
@@ -11,11 +16,11 @@ namespace Dashboard.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountRepository _accRepository;
-
-        public AccountController(IAccountRepository accRepository)
+        private readonly MailSettings _mailSettings;
+        public AccountController(IAccountRepository accRepository, IOptions<MailSettings> mailSettingsOptions)
         {
             _accRepository = accRepository;
-
+            _mailSettings = mailSettingsOptions.Value;
         }
         [HttpGet]
         public async Task<JsonResult> GetData()
@@ -30,7 +35,7 @@ namespace Dashboard.Controllers
                     fullname = item.Fullname,
                     email = item.Email,
                     gender = item.Gender,
-                    dob=item.Dob,
+                    dob = item.Dob,
                     status = item.Status,
                 });
 
@@ -65,11 +70,11 @@ namespace Dashboard.Controllers
                 }
 
                 var acc = await _accRepository.GetById(id);
-                var img= await _accRepository.GetAvatarImg(id);
+                var img = await _accRepository.GetAvatarImg(id);
 
                 if (acc != null)
                 {
-                    ViewData["AvatarImg"] = acc.Avatar_img;
+                    ViewData["AvatarImg"] = acc.Avatar;
                     return View(acc);
                 }
 
@@ -88,7 +93,7 @@ namespace Dashboard.Controllers
         {
             try
             {
-                
+
                 var obj = await _accRepository.GetById(id);
 
                 if (obj != null)
@@ -154,7 +159,7 @@ namespace Dashboard.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> AddAdmin(Admin? ad, IFormFile imgFile)
+        public async Task<IActionResult> AddAdmin(Admin? ad)
         {
             var accID = HttpContext.Session.GetInt32("Id");
             if (accID == null)
@@ -163,7 +168,8 @@ namespace Dashboard.Controllers
             }
 
             int newid = await _accRepository.GenerateNewId();
-            var avartar = await _accRepository.AddAvatarImg(newid, imgFile);
+            //Random password
+            string password = "123456";
             if (ModelState.IsValid)
             {
                 try
@@ -175,22 +181,18 @@ namespace Dashboard.Controllers
                         ModelState.AddModelError("", "This email is already registered.");
                         return View(ad);
                     }
-                    // Check length Password and ConfirmPassword
-                    if (ad.Pwd.Length < 6 )
-                    {
-                        ModelState.AddModelError("", "The length of password must be more than 6 characters!");
-                        return View(ad);
-                    }
                     // Create a new user with email and password
                     var user = await FirebaseAuth.DefaultInstance.CreateUserAsync(new UserRecordArgs()
                     {
                         Email = ad.Email,
-                        Password = ad.Pwd, // Use the entered password for user creation
+                        Password = password, // Use the entered password for user creation
                     });
-                    
-                    Admin admin = new Admin(newid, ad.Email, ad.Pwd, avartar, ad.Fullname);
 
+                    Admin admin = new Admin(newid, ad.Email, password, ad.Fullname);
                     await _accRepository.AddAdmin(admin);
+                    //Send Mail
+                    await SendMail(ad.Email, ad.Fullname, password);
+
                     return RedirectToAction("Admins");
                 }
                 catch (Firebase.Auth.FirebaseAuthException ex)
@@ -242,11 +244,86 @@ namespace Dashboard.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> ResetPasswordDefault(int id)
+        {
+            try
+            {
+                string pwd = "123456";
+                var obj = await _accRepository.GetAdminById(id);
+                if (obj != null)
+                {
+                    await _accRepository.UpdateFirebasePassword(obj.Email, pwd);
+                    await _accRepository.UpdateAdmin(obj);
+                    await SendMail(obj.Email,obj.Fullname, pwd);
+                    return RedirectToAction("Admins");
+                }
+                return View("Error");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error");
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> ChangePwd()
+        {
+            var accID = HttpContext.Session.GetInt32("Id");
+            if (accID == null)
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
+            var account = await _accRepository.GetAdminById(accID.Value);
+            if (account == null)
+            {
+                // Handle the case where the account with the given ID doesn't exist
+                return NotFound();
+            }
+
+            return View(account);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangePwd(string currentPassword, string newPassword, string confirmPassword)
+        {
+            var accID = HttpContext.Session.GetInt32("Id");
+            if (accID == null)
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
+            var account = await _accRepository.GetAdminById(accID.Value);
+            if (account == null)
+            {
+                // Handle the case where the account with the given ID doesn't exist
+                return NotFound();
+            }
+
+            // Check if the current password matches the stored password
+            if (account.Pwd != currentPassword)
+            {
+                ModelState.AddModelError("", "Current password is incorrect.");
+                return View(account); // Redirect back to the change password page with an error message
+            }
+
+            // Check if the new password and confirm password match
+            if (newPassword != confirmPassword)
+            {
+                ModelState.AddModelError("", "New password and confirm password do not match.");
+                return View(account); // Redirect back to the change password page with an error message
+            }
+
+            account.Pwd = newPassword;
+            await _accRepository.UpdateFirebasePassword(account.Email, newPassword);
+            await _accRepository.UpdateAdmin(account);
+            return RedirectToAction("Admins");
+
+        }
+
+
+        [HttpPost]
         public async Task<IActionResult> DeleteAdmin(int id)
         {
             try
             {
-
                 var obj = await _accRepository.GetAdminById(id);
 
                 if (obj != null)
@@ -254,7 +331,7 @@ namespace Dashboard.Controllers
                     obj.Status = 2;
 
                     await _accRepository.DeleteAdmin(obj);
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Admins");
                 }
                 return View("Error");
 
@@ -274,7 +351,7 @@ namespace Dashboard.Controllers
             {
                 return RedirectToAction("Login", "Authentication");
             }
-            
+
             var obj = await _accRepository.GetAdminById(id);
             ViewData["AvatarImg"] = obj.Avatar_img;
             return View(obj);
@@ -283,22 +360,74 @@ namespace Dashboard.Controllers
         public async Task<IActionResult> EditAdmin(Admin admin)
         {
             var accountId = HttpContext.Session.GetInt32("Id");
+            string pwd = "123456";
 
             if (accountId == null)
             {
                 // Redirect to the login page if the user is not logged in
                 return RedirectToAction("Login", "Authentication");
             }
+            
             if (ModelState.IsValid)
-                {
-                    await _accRepository.UpdateFirebasePassword(admin.Email, admin.Pwd);
+            {
+                var ad = await _accRepository.GetAdminById(admin.Id);
 
-                
-                    await _accRepository.UpdateAdmin(admin);
-                }
+                var acc= await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(ad.Email);
+                await FirebaseAuth.DefaultInstance.DeleteUserAsync(acc.Uid);
+                ad.Email= admin.Email;
+                ad.Fullname= admin.Fullname;
+                ad.Pwd= admin.Pwd;
+                await FirebaseAuth.DefaultInstance.CreateUserAsync(new UserRecordArgs()
+                {
+                    Email = ad.Email,
+                    Password = pwd, // Use the entered password for user creation
+                });
+
+                await _accRepository.UpdateAdmin(ad);
+                await SendMail(ad.Email,ad.Fullname,pwd);
+
+            }
             return RedirectToAction("Admins");
         }
 
-        
+        public async Task<bool> SendMail(string ReceiverEmail, string ReceiverName, string pwd)
+        {
+            string Title = "New Account";
+            string Body = $"TK: {ReceiverEmail} /n MK: {pwd}";
+
+
+            using (MimeMessage emailMessage = new MimeMessage())
+            {
+                //Tạo 1 địa chỉ mail người gửi
+                MailboxAddress emailFrom = new MailboxAddress(_mailSettings.SenderName, _mailSettings.SenderEmail);
+                //add địa chỉ mail người gửi vào mimemessage
+                emailMessage.From.Add(emailFrom);
+                //tạo 1 địa chỉ mail người nhận
+                MailboxAddress emailTo = new MailboxAddress(ReceiverName, ReceiverEmail);
+                //add địa chỉ mail người nhận vào mimemessage
+                emailMessage.To.Add(emailTo);
+
+                //Gán tiêu đề mail
+                emailMessage.Subject = Title;
+                //Tạo đối tượng chứa nội dung mail
+                BodyBuilder emailBodyBuilder = new BodyBuilder();
+                emailBodyBuilder.TextBody = Body;
+                //Gán nội dung mail vào mimemessage
+                emailMessage.Body = emailBodyBuilder.ToMessageBody();
+                //tạo đối tượng SmtpClient từ Mailkit.Net.Smtp namespace, không dùng  System.Net.Mail nhé
+                using (SmtpClient mailClient = new SmtpClient())
+                {
+                    //Kết nối tới server smtp.gmail
+                    mailClient.Connect(_mailSettings.Server, _mailSettings.Port, MailKit.Security.SecureSocketOptions.StartTls);
+                    //đăng nhập
+                    mailClient.Authenticate(_mailSettings.SenderEmail, _mailSettings.Password);
+                    //gửi mail
+                    mailClient.Send(emailMessage);
+                    //ngắt kết nối
+                    mailClient.Disconnect(true);
+                }
+            }
+            return true;
+        }
     }
 }

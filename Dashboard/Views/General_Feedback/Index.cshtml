@@ -38,6 +38,7 @@
 @section Scripts {
     <script type="text/javascript" defer>
         $(document).ready(function () {
+            var stt = 1;
             $('#dataTable').DataTable({
                 dom: "frtip",
                 language: {
@@ -51,9 +52,15 @@
 
                 },
                 "columns": [
-                    { "data": "id", "className": "text-center" },
-                    { "data": "email", "className": "text-center" },
-                    { "data": "type", "className": "text-center" },
+                    {
+                        "data": "id",
+                        "render": function (data, type, row) {
+                            return stt++;
+                        },
+                        "className": "text-center"
+                    },
+                    { "data": "email" },
+                    { "data": "type" },
                     {
                         "data": "description",
                         "render": function (data, type, row) {
@@ -62,14 +69,21 @@
                                 `<p>${row.description}</p>`
                         }
                     },
-                    { "data": "created", "className": "text-center" },
-                    { "data": "status", "className": "text-center" },
+                    { "data": "created" },
+                    {
+                        "data": "status",
+                        "render": function (data, type, row) {
+                            if (row.status == 1) return '<p class="text-warning">Waiting</p>';
+                            if (row.status == 2) return '<p class="text-success">Reply</p>';
+                        },
+                        "className": "text-center"
+                    },
                     {
                         "data": null,
                         "render": function (data, type, row) {
                             return '<div class="text-center action-buttons">' +
                                 '<a href="/General_Feedback/Detail?id=' + data.id + '"class="btn btn-success btn-square px-3 " style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
-                                '<a href="/General_Feedback/Edit?id=' + data.id + '" class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                                '<a href="/General_Feedback/Reply?id=' + data.id + '" class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
                                 '</div>';
                         }
                     }
