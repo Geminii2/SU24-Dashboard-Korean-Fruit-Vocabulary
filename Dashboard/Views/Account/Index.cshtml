@@ -61,11 +61,12 @@
     </div>
 </div>
 
-@section Scripts{
+@section Scripts {
     <script type="text/javascript" defer>
         $(document).ready(function () {
+            var stt = 1;
             var suc = "@TempData["SuccessMessage"]",
-            error = "@TempData["ErrorMessage"]";
+                error = "@TempData["ErrorMessage"]";
             if (suc) {
                 openSuccessModal(suc);
             }
@@ -83,15 +84,28 @@
                     "url": "/Account/GetData",
                     "tye": "GET",
                     "datatype": "json",
-                    
+
                 },
                 "columns": [
-                    { "data": "id", "className": "text-center" },
-                    { "data": "fullname", "className": "text-center" },
-                    { "data": "email", "className": "text-center" },
-                    { "data": "gender", "className": "text-center" },
-                    { "data": "dob", "className": "text-center" },
-                    { 
+                    {
+                        "data": "id",
+                        "render": function (data, type, row) {
+                            return stt++;
+                        },
+                        "className": "text-center"
+                    },
+                    { "data": "fullname" },
+                    { "data": "email" },
+                    {
+                        "data": "gender",
+                        "render": function (data, type, row) {
+                            if (row.gender == "Male") return '<i class="fa fa-mars" style="color:blue"> </i>';
+                            if (row.gender == "Female") return '<i class="fa fa-venus" style="color:pink"> </i>';
+                        },
+                        "className": "text-center"
+                    },
+                    { "data": "dob" },
+                    {
                         "data": "status",
                         "render": function (data, type, row) {
                             if (row.status == 1) return '<i class="fa fa-smile-o text-success" aria-hidden="true" ></i>';
@@ -108,7 +122,7 @@
                                 + '</div>';
                         }
                     }
-                    
+
                 ]
             });
             var table = $('#dataTable').DataTable();

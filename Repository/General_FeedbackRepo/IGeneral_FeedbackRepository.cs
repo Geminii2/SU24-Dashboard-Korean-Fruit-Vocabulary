@@ -10,6 +10,8 @@ namespace Repository.General_FeedbackRepo
     public interface IGeneral_FeedbackRepository
     {
         Task<IEnumerable<General_Feedback>> GetAll();
-        Task<General_Feedback> GetById(int id);
+        Task<General_Feedback> GetById(string id);
+        Task UpdateVoca(General_Feedback gen_fb);
+
     }
 }

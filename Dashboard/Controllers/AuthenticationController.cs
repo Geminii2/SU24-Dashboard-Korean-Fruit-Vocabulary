@@ -51,14 +51,14 @@ namespace Dashboard.Controllers
 
                         if (loggedInAccount.Email != null)
                         {
-                            return RedirectToAction("Index", "Account");
+                            return RedirectToAction("Index", "Dashboard");
                         }
                         else if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                         {
                             return Redirect(returnUrl);
                         }
 
-                        return RedirectToAction("Index", "Account");
+                        return RedirectToAction("Index", "Dashboard");
                     }
 
                     ModelState.AddModelError("", "Invalid email or password");

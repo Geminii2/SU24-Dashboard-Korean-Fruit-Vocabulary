@@ -8,7 +8,7 @@ namespace BusinessObject.Models
 {
     public class General_Feedback
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public int Account_Id { get; set; }
         public string Type { get; set; }
         public string? Description { get; set; }

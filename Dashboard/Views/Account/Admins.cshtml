@@ -64,6 +64,7 @@
 @section Scripts {
     <script type="text/javascript" defer>
         $(document).ready(function () {
+            var stt = 1;
             var suc = "@TempData["SuccessMessage"]",
                 error = "@TempData["ErrorMessage"]";
             if (suc) {
@@ -86,16 +87,29 @@
 
                 },
                 "columns": [
-                    { "data": "id", "className": "text-center" },
-                    { "data": "fullname", "className": "text-center" },
-                    { "data": "email", "className": "text-center" },
-                    { "data": "gender", "className": "text-center" },
-                    { "data": "dob", "className": "text-center" },
+                    {
+                        "data": "id",
+                        "render": function (data, type, row) {
+                            return stt++;
+                        },
+                        "className": "text-center"
+                    },
+                    { "data": "fullname" },
+                    { "data": "email" },
+                    {
+                        "data": "gender",
+                        "render": function (data, type, row) {
+                            if (row.gender == "Male") return '<i class="fa fa-mars" style="color:blue" > </i>';
+                            if (row.gender == "Female") return '<i class="fa fa-venus" style="color:pink"> </i>';
+                        },
+                        "className": "text-center"
+                    },
+                    { "data": "dob" },
                     {
                         "data": null,
                         "render": function (data, type, row) {
                             return '<div class="text-center action-buttons">' +
-                                '<a href="/Account/EditAdmin?id='+ data.id +'" class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                                '<a href="/Account/EditAdmin?id=' + data.id + '" class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
                                 '<a href="/Account/DetailAdmin?id=' + data.id + '"class="btn btn-success btn-square px-3" style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
                                 '<a href="#" data-toggle="modal" data-target="#deleteModal" data-account-id="' + data.id + '" class="btn btn-danger btn-square delete-link"><i class="fa fa-times" aria-hidden="true"></i></a>'
                                 + '</div>';

@@ -1,6 +1,7 @@
 ﻿using BusinessObject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Repository.AccountRepo;
+using System.Globalization;
 using System.Security.Principal;
 
 namespace Dashboard.Controllers
@@ -28,6 +29,8 @@ namespace Dashboard.Controllers
 
                 if (acc != null)
                 {
+                   var dob= DateTime.Parse(acc.Dob);
+                    ViewData["BirthDate"]=dob.ToString("dd-MM-yyyy");
                     ViewData["AvatarImg"] = acc.Avatar_img;
                     return View(acc);
                 }
@@ -88,6 +91,7 @@ namespace Dashboard.Controllers
             {
                 avatar = await _accRepository.AddAvatarImg(admin.Id, imageFile);
             }
+            
             Admin ad = new Admin
                 {
                     Id=admin.Id,

@@ -40,13 +40,19 @@ namespace DataAccess
         public async Task<List<General_Feedback>> GetAll()
         {
             string databaseURL = dtb + ".json";
-            List<General_Feedback> gen_feedback = await localDAO.GetAll<General_Feedback>(databaseURL);
+            List<General_Feedback> gen_feedback = await localDAO.GetAllString<General_Feedback>(databaseURL);
             return gen_feedback;
         }
-        public async Task<General_Feedback> GetById(int id)
+        public async Task<General_Feedback> GetById(string id)
         {
             string databaseURL = dtb + id + ".json";
             return await localDAO.GetById<General_Feedback>(databaseURL);
+        }
+
+        public async Task SaveData(General_Feedback gen_fb)
+        {
+            string databaseURL = dtb + gen_fb.Id + ".json";
+            await localDAO.SaveData(databaseURL, gen_fb);
         }
     }
 }
