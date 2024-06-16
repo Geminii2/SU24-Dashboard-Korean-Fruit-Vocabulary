@@ -18,7 +18,7 @@ namespace BusinessObject.Models
             Role_id = 2;
             Fullname= _Fullname;
             Avatar_img = "";
-            Dob="";
+            Dob= "";
             Country="";
             Gender ="";
             Status= 1;

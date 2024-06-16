@@ -21,7 +21,7 @@
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
-                            <tr class="bg-gradient-primary">
+                            <tr>
                                 <th class="text-center">Order</th>
                                 <th class="text-center">Fullname</th>
                                 <th class="text-center">Email</th>
@@ -101,6 +101,7 @@
                         "render": function (data, type, row) {
                             if (row.gender == "Male") return '<i class="fa fa-mars" style="color:blue"> </i>';
                             if (row.gender == "Female") return '<i class="fa fa-venus" style="color:pink"> </i>';
+                            if (row.gender == "" ) return `<p${row.gender}</p>`;
                         },
                         "className": "text-center"
                     },
