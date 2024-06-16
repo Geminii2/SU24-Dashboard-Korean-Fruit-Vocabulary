@@ -17,6 +17,6 @@ namespace BusinessObject.Models
         public string? Country { get; set; }
         public int Status { get; set; }
         public string? Avatar { get; set; }
-        public string Created_date { get; set; }
+        public string? Created_date { get; set; }
     }
 }

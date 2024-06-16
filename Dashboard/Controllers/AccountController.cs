@@ -2,12 +2,14 @@
 using BusinessObject.Models;
 using Firebase.Auth;
 using FirebaseAdmin.Auth;
+using Google.Apis.Util;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using Org.BouncyCastle.Asn1.Pkcs;
 using Repository.AccountRepo;
+using System.Globalization;
 using System.Net.Sockets;
 using System.Security.Principal;
 
@@ -22,6 +24,8 @@ namespace Dashboard.Controllers
             _accRepository = accRepository;
             _mailSettings = mailSettingsOptions.Value;
         }
+
+       
         [HttpGet]
         public async Task<JsonResult> GetData()
         {
@@ -35,7 +39,7 @@ namespace Dashboard.Controllers
                     fullname = item.Fullname,
                     email = item.Email,
                     gender = item.Gender,
-                    dob = item.Dob,
+                    dob = item.Dob.Replace("-","/"),
                     status = item.Status,
                 });
 
@@ -49,10 +53,10 @@ namespace Dashboard.Controllers
         public async Task<IActionResult> Index()
         {
             var accID = HttpContext.Session.GetInt32("Id");
-            if (accID == null)
-            {
-                return RedirectToAction("Login", "Authentication");
-            }
+            //if (accID == null)
+            //{
+            //    return RedirectToAction("Login", "Authentication");
+            //}
 
             var accounts = await _accRepository.GetAll();
             return View(accounts);
@@ -127,7 +131,7 @@ namespace Dashboard.Controllers
                     fullname = item.Fullname,
                     email = item.Email,
                     gender = item.Gender,
-                    dob = item.Dob,
+                    dob= item.Dob.Replace("-","/"),
                 });
 
                 return Json(new { data = list });
@@ -140,10 +144,10 @@ namespace Dashboard.Controllers
         public async Task<IActionResult> Admins()
         {
             var accID = HttpContext.Session.GetInt32("Id");
-            if (accID == null)
-            {
-                return RedirectToAction("Login", "Authentication");
-            }
+            //if (accID == null)
+            //{
+            //    return RedirectToAction("Login", "Authentication");
+            //}
 
             var accounts = await _accRepository.GetAll();
             return View(accounts);
@@ -254,7 +258,7 @@ namespace Dashboard.Controllers
                 {
                     await _accRepository.UpdateFirebasePassword(obj.Email, pwd);
                     await _accRepository.UpdateAdmin(obj);
-                    await SendMail(obj.Email,obj.Fullname, pwd);
+                    await SendMail(obj.Email, obj.Fullname, pwd);
                     return RedirectToAction("Admins");
                 }
                 return View("Error");
@@ -367,12 +371,12 @@ namespace Dashboard.Controllers
                 // Redirect to the login page if the user is not logged in
                 return RedirectToAction("Login", "Authentication");
             }
-            
+
             if (ModelState.IsValid)
             {
                 var ad = await _accRepository.GetAdminById(admin.Id);
 
-                var acc= await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(ad.Email);
+                var acc = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(ad.Email);
                 await FirebaseAuth.DefaultInstance.DeleteUserAsync(acc.Uid);
                 ad.Email= admin.Email;
                 ad.Fullname= admin.Fullname;
@@ -384,7 +388,7 @@ namespace Dashboard.Controllers
                 });
 
                 await _accRepository.UpdateAdmin(ad);
-                await SendMail(ad.Email,ad.Fullname,pwd);
+                await SendMail(ad.Email, ad.Fullname, pwd);
 
             }
             return RedirectToAction("Admins");

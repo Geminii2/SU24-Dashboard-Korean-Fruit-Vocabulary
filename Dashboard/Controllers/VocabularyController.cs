@@ -43,10 +43,10 @@ namespace Dashboard.Controllers
         public async Task<IActionResult> Index()
         {
             var accID = HttpContext.Session.GetInt32("Id");
-            if (accID == null)
-            {
-                return RedirectToAction("Login", "Authentication");
-            }
+            //if (accID == null)
+            //{
+            //    return RedirectToAction("Login", "Authentication");
+            //}
 
             var voca = await _vocabularyRepository.GetAll();
             return View(voca);
