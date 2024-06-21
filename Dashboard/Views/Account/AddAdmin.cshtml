@@ -3,13 +3,12 @@
 @{
     ViewData["Title"] = "AddAdmin";
     Layout = "_Dashboard";
-
 }
 <div class="container">
     <main role="main" class="pb-3">
         <div class="card shadow mb-4">
             @* <div class="card-header py-3">
-                <h2 class="m-0 font-weight-bold text-black">Add Admin</h2>
+            <h2 class="m-0 font-weight-bold text-black">Add Admin</h2>
             </div> *@
             <div class="card-body ">
                 <div class="row">
@@ -17,23 +16,21 @@
                         <form class="user" asp-controller="Account" asp-action="AddAdmin">
                             <label>Email</label>
                             <div class="form-group">
-                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control ", placeholder = "Enter Email", required = "required", type = "email" })
+                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Enter Email", required = "required", type = "email" })
                             </div>
                             <label>Fullname</label>
                             <div class="form-group">
-                                @Html.TextBoxFor(model => model.Fullname, new { @class = "form-control ", placeholder = "Enter full name", required = "required" })
+                                @Html.TextBoxFor(model => model.Fullname, new { @class = "form-control", placeholder = "Enter Fullname", required = "required" })
                             </div>
                             <div style="margin-top:15px; margin-bottom:15px">
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
                             </div>
-                            <button type="submit" class="btn btn-success btn-block" style=" text-decoration:none; color: white">Create New Account</button>
+                            <button type="submit" class="btn btn-success btn-block" style="text-decoration:none; color: white; margin-bottom: 5px;">Create New Account</button>
                         </form>
-                        <a class="btn btn-secondary btn-block" style="text-decoration:none; color: white" asp-action="Admins">Close</a>
+                        <a class="btn btn-secondary btn-block" style="text-decoration:none; color: white; margin-top: 5px;" asp-action="Admins">Close</a>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
-
 </div>
