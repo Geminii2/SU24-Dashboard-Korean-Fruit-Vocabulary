@@ -166,6 +166,7 @@ namespace Dashboard.Controllers
         public async Task<IActionResult> AddAdmin(Admin? ad)
         {
             var accID = HttpContext.Session.GetInt32("Id");
+
             if (accID == null)
             {
                 return RedirectToAction("Login", "Authentication");

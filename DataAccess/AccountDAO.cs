@@ -63,7 +63,7 @@ namespace DataAccess
             string databaseURL = dtb + id + ".json";
             return await localDAO.GetById<Account>(databaseURL);
         }
-        
+
         public async Task<int> IncreaseId()
         {
             string databaseURL = dtbad + ".json";
@@ -75,7 +75,7 @@ namespace DataAccess
             string databaseURL = dtb + acc.Id + ".json";
             await localDAO.SaveData(databaseURL, acc);
         }
-        
+
         public async Task DeleteData(Account acc)
         {
             string databaseURL = dtb + acc.Id + ".json";
@@ -183,14 +183,14 @@ namespace DataAccess
         }
         public void Logout(HttpContext httpContext)
         {
-          httpContext.Session.Clear();
+            httpContext.Session.Clear();
         }
 
         public async Task<List<Admin>> GetAllAdmin()
         {
             string databaseURL = dtbad + ".json";
             List<Admin> admins = await localDAO.GetAll<Admin>(databaseURL);
-            var admin = admins.Where(ad=> ad.Role_id == 2).ToList();
+            var admin = admins.Where(ad => ad.Role_id == 2).ToList();
             return admin;
         }
         public async Task<Admin> GetAdminById(int id)
@@ -235,6 +235,74 @@ namespace DataAccess
                 // Handle Firebase Authentication exception as needed
             }
         }
-        
+
+        public async Task<List<Account>> GetAccounts()
+        {
+            string databaseURL = dtb + ".json";
+            List<Account> accounts = await localDAO.GetAll<Account>(databaseURL);
+            return accounts.Select(x => new Account
+            {
+                Id = x.Id,
+                Gender = x.Gender,
+                Dob = x.Dob,
+                Created_date = x.Created_date
+            }).ToList();
+        }
+
+        public async Task<List<StatisticsItem>> QueryAndSaveData(int year, string ageRange)
+        {
+            var accounts = await GetAccounts();
+
+            var minAge = int.Parse(ageRange.Split('-')[0]);
+            var maxAge = int.Parse(ageRange.Split('-')[1]);
+
+            var startDate = new DateTime(year, 1, 1);
+            var endDate = new DateTime(year, 12, 31);
+
+            var statistics = new List<StatisticsItem>();
+            for (int i = 1; i<=12; i++)
+            {
+                statistics.Add(new StatisticsItem
+                {
+                    Month = i,
+                    Total = 0,
+                    FemaleCount = 0,
+                    MaleCount=0
+                });
+            }
+            foreach (var account in accounts)
+            {
+                var dob = DateTime.ParseExact(account.Dob, "dd-MM-yyyy", null);
+                var createdDate = DateTime.ParseExact(account.Created_date, "dd-MM-yyyy", null);
+
+                if (createdDate >= startDate && createdDate <= endDate)
+                {
+                    var age = CalculateAge(dob, startDate);
+                    if (age >= minAge && age <= maxAge)
+                    {
+                        var month = createdDate.Month;
+                        var statItem = statistics.FirstOrDefault(s => s.Month == month);
+                        if (statItem != null)
+                        {
+                            // Cập nhật số liệu
+                            statItem.Total++;
+                            if (account.Gender == "Male")
+                                statItem.MaleCount++;
+                            else if (account.Gender == "Female")
+                                statItem.FemaleCount++;
+                        }
+                    }
+                }
+            }
+
+            return statistics;
+        }
+
+        public int CalculateAge(DateTime birthDate, DateTime referenceDate)
+        {
+            int age = referenceDate.Year - birthDate.Year;
+            //if (referenceDate < birthDate.AddYears(age)) age--;
+            return age;
+        }
     }
 }

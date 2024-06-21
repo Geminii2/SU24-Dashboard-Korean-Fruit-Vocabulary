@@ -14,7 +14,7 @@ namespace Repository.AccountRepo
         Task<Account> GetById(int id);
         Task<int> GenerateNewId();
         Task AddUser(Account acc);
-        
+
         Task DeleteUser(Account acc);
         Task<bool> Login(string email, string password);
         Task<Admin> GetByEmail(string email);
@@ -31,5 +31,6 @@ namespace Repository.AccountRepo
         Task UpdateAdmin(Admin ad);
         Task DeleteAdmin(Admin ad);
         Task UpdateFirebasePassword(string email, string password);
+        Task<List<StatisticsItem>> statisticsItems(int year, string age);
     }
 }
