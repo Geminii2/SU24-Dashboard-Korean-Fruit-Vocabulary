@@ -25,7 +25,7 @@ builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailS
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(1800);
+    options.IdleTimeout = TimeSpan.FromHours(24);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
