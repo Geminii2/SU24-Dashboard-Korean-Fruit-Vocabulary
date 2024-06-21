@@ -37,6 +37,6 @@ namespace Repository.AccountRepo
         public async Task UpdateAdmin(Admin ad) => await AccountDAO.GetInstance.SaveDataAd(ad);
         public async Task UpdateFirebasePassword(string email, string pwd) => await AccountDAO.GetInstance.UpdateFirebasePassword(email, pwd);
 
-        public async Task<List<StatisticsItem>> statisticsItems(int year, string age) => await AccountDAO.GetInstance.QueryAndSaveData(year, age);
+        public async Task<List<StatisticsItem>> statisticsItems(int year, string age) => await AccountDAO.GetInstance.CountAccountbyAge(year, age);
     }
 }

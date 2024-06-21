@@ -249,7 +249,7 @@ namespace DataAccess
             }).ToList();
         }
 
-        public async Task<List<StatisticsItem>> QueryAndSaveData(int year, string ageRange)
+        public async Task<List<StatisticsItem>> CountAccountbyAge(int year, string ageRange)
         {
             var accounts = await GetAccounts();
 
@@ -266,13 +266,17 @@ namespace DataAccess
                 {
                     Month = i,
                     Total = 0,
-                    FemaleCount = 0,
-                    MaleCount=0
+                    Female = 0,
+                    Male=0
                 });
             }
             foreach (var account in accounts)
             {
-                var dob = DateTime.ParseExact(account.Dob, "dd-MM-yyyy", null);
+                var dob = new DateTime();
+                if (account.Dob != null && account.Dob != "")
+                {
+                    dob = DateTime.ParseExact(account.Dob, "dd-MM-yyyy", null);
+                }
                 var createdDate = DateTime.ParseExact(account.Created_date, "dd-MM-yyyy", null);
 
                 if (createdDate >= startDate && createdDate <= endDate)
@@ -287,9 +291,9 @@ namespace DataAccess
                             // Cập nhật số liệu
                             statItem.Total++;
                             if (account.Gender == "Male")
-                                statItem.MaleCount++;
+                                statItem.Male++;
                             else if (account.Gender == "Female")
-                                statItem.FemaleCount++;
+                                statItem.Female++;
                         }
                     }
                 }

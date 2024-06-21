@@ -10,7 +10,7 @@ namespace BusinessObject.Models
     {
         public int Month { get; set; }
         public int Total { get; set; }
-        public int MaleCount { get; set; }
-        public int FemaleCount { get; set; }
+        public int Male { get; set; }
+        public int Female { get; set; }
     }
 }
