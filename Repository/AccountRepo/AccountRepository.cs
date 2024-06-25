@@ -38,5 +38,7 @@ namespace Repository.AccountRepo
         public async Task UpdateFirebasePassword(string email, string pwd) => await AccountDAO.GetInstance.UpdateFirebasePassword(email, pwd);
 
         public async Task<List<StatisticsItem>> statisticsItems(int year, string age) => await AccountDAO.GetInstance.CountAccountbyAge(year, age);
+
+
     }
 }

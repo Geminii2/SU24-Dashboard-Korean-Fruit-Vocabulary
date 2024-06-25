@@ -236,22 +236,10 @@ namespace DataAccess
             }
         }
 
-        public async Task<List<Account>> GetAccounts()
-        {
-            string databaseURL = dtb + ".json";
-            List<Account> accounts = await localDAO.GetAll<Account>(databaseURL);
-            return accounts.Select(x => new Account
-            {
-                Id = x.Id,
-                Gender = x.Gender,
-                Dob = x.Dob,
-                Created_date = x.Created_date
-            }).ToList();
-        }
 
         public async Task<List<StatisticsItem>> CountAccountbyAge(int year, string ageRange)
         {
-            var accounts = await GetAccounts();
+            var accounts = await GetAll();
 
             var minAge = int.Parse(ageRange.Split('-')[0]);
             var maxAge = int.Parse(ageRange.Split('-')[1]);
@@ -298,15 +286,14 @@ namespace DataAccess
                     }
                 }
             }
-
             return statistics;
         }
 
         public int CalculateAge(DateTime birthDate, DateTime referenceDate)
         {
             int age = referenceDate.Year - birthDate.Year;
-            //if (referenceDate < birthDate.AddYears(age)) age--;
             return age;
         }
+
     }
 }
