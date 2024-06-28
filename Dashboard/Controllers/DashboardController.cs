@@ -5,6 +5,7 @@ using Firebase.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Repository.AccountRepo;
+using System.Reflection.Emit;
 using System.Security.Principal;
 
 namespace Dashboard.Controllers
@@ -19,43 +20,21 @@ namespace Dashboard.Controllers
 
         public IActionResult Index()
         {
-            //var age1 = await _accRepository.statisticsItems(2024, "5-10");
-            //var age2 = await _accRepository.statisticsItems(2024, "10-15");
-            //var age3 = await _accRepository.statisticsItems(2024, "15-20");
-            //var age4 = await _accRepository.statisticsItems(2024, "20-25");
-
-            //ViewData["age1Total"] = age1.Select(x => x.Total).ToList();
-            //ViewData["age1Male"] = age1.Select(x => x.Male).ToList();
-            //ViewData["age1Female"] = age1.Select(x => x.Female).ToList();
-
-            //ViewData["age2Total"] = age2.Select(x => x.Total).ToList();
-            //ViewData["age2Male"] = age2.Select(x => x.Male).ToList();
-            //ViewData["age2Female"] = age2.Select(x => x.Female).ToList();
-
-            //ViewData["age3Total"] = age3.Select(x => x.Total).ToList();
-            //ViewData["age3Male"] = age3.Select(x => x.Male).ToList();
-            //ViewData["age3Female"] = age3.Select(x => x.Female).ToList();
-
-            //ViewData["age4Total"] = age4.Select(x => x.Total).ToList();
-            //ViewData["age4Male"] = age4.Select(x => x.Male).ToList();
-            //ViewData["age4Female"] = age4.Select(x => x.Female).ToList();
-
-            //ViewData["age4"] = age4;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAccountData(string yearSelect, int customYears, string typeSelect)
+        public async Task<IActionResult> GetAccountData(string yearSelect, int customYears, string typeSelect, string ageSelect)
         {
             var obj = new List<StatisticsItem>();
 
             if (yearSelect != "custom")
             {
-                obj = await _accRepository.statisticsItems(int.Parse(yearSelect), "0-100");
+                obj = await _accRepository.statisticsAgebyMonthAndQ(int.Parse(yearSelect), ageSelect);
             }
             else if (customYears != 0 && customYears >0)
             {
-                obj = await _accRepository.statisticsItems(customYears, "0-100");
+                obj = await _accRepository.statisticsAgebyMonthAndQ(customYears, ageSelect);
             }
             if (typeSelect =="month")
             {
@@ -90,7 +69,7 @@ namespace Dashboard.Controllers
             var q4Male = obj[9].Male + obj[10].Male + obj[11].Male;
             var q4Female = obj[9].Female + obj[10].Female + obj[11].Female;
 
-            var labels = new List<string>() { "Q1", "Q2", "Q3", "Q4" };
+            var labels = new List<string>() { "Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4" };
             var qtotal = new List<string>() { q1Total.ToString(), q2Total.ToString(), q3Total.ToString(), q4Total.ToString() };
             var qmale = new List<string>() { q1Male.ToString(), q2Male.ToString(), q3Male.ToString(), q4Male.ToString() };
             var qfemale = new List<string>() { q1Female.ToString(), q2Female.ToString(), q3Female.ToString(), q4Female.ToString() };
@@ -98,15 +77,58 @@ namespace Dashboard.Controllers
             List<List<string>> qdata = new List<List<string>>() { labels, qtotal, qmale, qfemale };
             return Ok(qdata);
 
-            //var list = obj.Select(item => new
-            //{
-            //    month = item.Month,
-            //    total = item.Total,
-            //    male = item.Male,
-            //    female = item.Female,
-            //});
-
-
         }
+
+        public IActionResult YearAndCustom()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetAccountDatabyYearAndCustom(string yearSelect, string startDate, string endDate, string ageSelect, string typeSelect)
+        {
+            var obj = new List<StatisticsItem>();
+            if (typeSelect== "year")
+            {
+                var date = DateTime.Now;
+                if (yearSelect == "all" && startDate == null && endDate == null)
+                {
+                    startDate = "2020-01-01";
+                    endDate = date.ToString();
+                }
+                if (yearSelect == "2year" && startDate == null && endDate == null)
+                {
+                    startDate = date.AddYears(-2).ToString();
+                    endDate = date.ToString();
+                }
+
+                obj = await _accRepository.statisticsAgebyYear(ageSelect, startDate, endDate);
+
+                var label = new List<string>();
+                var total = new List<string>();
+                var male = new List<string>();
+                var female = new List<string>();
+
+                foreach (var item in obj)
+                {
+                    label.Add(item.Label.ToString());
+                    total.Add(item.Total.ToString());
+                    male.Add(item.Male.ToString());
+                    female.Add(item.Female.ToString());
+                }
+                List<List<string>> data = new List<List<string>>() { label, total, male, female };
+                return Ok(data);
+            }
+            var obj2 = await _accRepository.statisticsAgebyCustom(ageSelect, startDate, endDate);
+            var label1 = DateTime.Parse(startDate);
+            var label2 = DateTime.Parse(endDate);
+
+            obj2.Label= label1.ToString("dd/MM/yyyy") +" to "+ label2.ToString("dd/MM/yyyy");
+            obj2.Total.ToString();
+            obj2.Male.ToString();
+            obj2.Female.ToString();
+
+            return Ok(obj2);
+        }
+
     }
 }

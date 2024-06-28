@@ -1,36 +1,40 @@
 ﻿let chart;
 
-//function updateYearSelect() {
-//    const yearSelect = document.getElementById('yearSelect').value;
-//    const customYear = document.getElementById('customYear');
-//    if (yearSelect === 'custom') {
-//        customYear.style.display = 'block';
-//    } else {
-//        customYear.style.display = 'none';
-//        fetchData();
-//    }
-//}
-
 async function fetchData() {
     const yearSelect = document.getElementById('yearSelect').value;
     const typeSelect = document.getElementById('typeSelect').value;
     const ageSelect = document.getElementById('ageSelect').value;
-    let customYears = 0;
+    let startDate = "";
+    let endDate = "";
+
+    if (typeSelect === 'custom') {
+        startDate = document.getElementById('start-date').value;
+        endDate = document.getElementById('end-date').value;
+    }
     if (yearSelect === 'custom') {
-        customYears = parseInt(document.getElementById('customYear').value);
+        startDate = "01-01-" + document.getElementById('start-year').value;
+        endDate = "31-12-" + document.getElementById('end-year').value;
     }
     const formData = new FormData();
     formData.append('yearSelect', yearSelect);
-    formData.append('customYears', customYears);
+    formData.append('startDate', startDate);
+    formData.append('endDate', endDate);
     formData.append('typeSelect', typeSelect);
     formData.append('ageSelect', ageSelect);
 
-    const response = await fetch('/Dashboard/GetAccountData', {
+    const response = await fetch('/Dashboard/GetAccountDatabyYearAndCustom', {
         method: 'POST',
         body: formData
     });
     const data = await response.json();
-    updateChart(data);
+    if (typeSelect === 'custom') {
+        const stringData = Object.keys(data).reduce((acc, key) => {
+            acc[key] = String(data[key]);
+            return acc;
+        }, {});
+        updateChart2(stringData);
+    } else
+        updateChart(data);
 }
 function updateChart(data) {
     const labels = data[0];
@@ -44,6 +48,21 @@ function updateChart(data) {
     chart.data.datasets[1].data = dataMale;
     chart.data.datasets[2].data = dataFemale;
     chart.update();
+
+}
+function updateChart2(data) {
+    const labels = [data.label];
+    const dataTotal = [data.total];
+    const dataMale = [data.male];
+    const dataFemale = [data.female];
+
+    // Cập nhật dữ liệu của biểu đồ hiện tại mà không tạo lại biểu đồ mới
+    chart.data.labels = labels;
+    chart.data.datasets[0].data = dataTotal;
+    chart.data.datasets[1].data = dataMale;
+    chart.data.datasets[2].data = dataFemale;
+    chart.update();
+
 }
 function createChart(labels, dataTotal, dataMale, dataFemale) {
     const ctx = document.getElementById('myChart').getContext('2d');
@@ -82,8 +101,7 @@ function createChart(labels, dataTotal, dataMale, dataFemale) {
             responsive: true,
             scales: {
                 y: {
-                    min: 0,
-                    max: 100
+                    beginAtZero: true
                 }
             },
             legend: {
@@ -125,15 +143,15 @@ const dataByYearAndAge = {
             'Female': [7, 11, 3, 4, 2, 4, 13, 9, 16, 26, 23, 18]
         },
     }
-    
+
 };
 
 // Tải dữ liệu mặc định khi trang được tải lần đầu
 document.addEventListener('DOMContentLoaded', function () {
     const yearSelect = document.getElementById('yearSelect').value;
-    const dataTotal = dataByYearAndAge[yearSelect]['5-10']['Total'];
-    const dataMale = dataByYearAndAge[yearSelect]['5-10']['Male'];
-    const dataFemale = dataByYearAndAge[yearSelect]['5-10']['Female'];
+    const dataTotal = dataByYearAndAge[2023]['10-15']['Total'];
+    const dataMale = dataByYearAndAge[2023]['10-15']['Male'];
+    const dataFemale = dataByYearAndAge[2023]['10-15']['Female'];
 
     createChart(labels, dataTotal, dataMale, dataFemale);
 });

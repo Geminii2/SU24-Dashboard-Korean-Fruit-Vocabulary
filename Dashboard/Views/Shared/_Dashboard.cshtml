@@ -66,12 +66,27 @@
             </li>
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item @GetActiveClass("Dashboard", new[] { "Index" })">
+            @* <li class="nav-item @GetActiveClass("Dashboard", new[] { "Index" })">
                 <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
+            </li> *@
+            <li class="nav-item @GetActiveClass("Dashboard", new[] { "Index", "YearAndCustom" }) )">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
+                   aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Dashboard</span>
+                </a>
+                <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
+                     data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item @GetActiveClass("Dashboard", new[] { "Index"})" asp-controller="Dashboard" asp-action="Index">MonthAndQ</a>
+                        <a class="collapse-item @GetActiveClass("Dashboard", new[] { "YearAndCustom" })" asp-controller="Dashboard" asp-action="YearAndCustom">YearAndCustom</a>
+                    </div>
+                </div>
             </li>
+
 
             <!-- Divider -->
             <li>

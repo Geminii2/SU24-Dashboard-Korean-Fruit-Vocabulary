@@ -31,6 +31,10 @@ namespace Repository.AccountRepo
         Task UpdateAdmin(Admin ad);
         Task DeleteAdmin(Admin ad);
         Task UpdateFirebasePassword(string email, string password);
-        Task<List<StatisticsItem>> statisticsItems(int year, string age);
+        Task<List<StatisticsItem>> statisticsAgebyMonthAndQ(int year, string age);
+
+        Task<List<StatisticsItem>> statisticsAgebyYear(string ageRange, string startDate, string endDate);
+
+        Task<StatisticsItem> statisticsAgebyCustom(string ageRange, string startDate, string endDate);
     }
 }

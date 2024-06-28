@@ -8,7 +8,7 @@ namespace BusinessObject.Models
 {
     public class StatisticsItem
     {
-        public int Month { get; set; }
+        public string Label { get; set; }
         public int Total { get; set; }
         public int Male { get; set; }
         public int Female { get; set; }
