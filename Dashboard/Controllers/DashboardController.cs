@@ -129,6 +129,34 @@ namespace Dashboard.Controllers
 
             return Ok(obj2);
         }
+        public IActionResult StatisticsCountry()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> GetAccountDataCountry(string yearSelect, int customYears)
+        {
+            string year = yearSelect;
+            if (yearSelect== "custom")
+            {
+                year= customYears.ToString();
+            }
+
+            var obj = await _accRepository.CountCountry(int.Parse(year));
+
+            var label = yearSelect;
+            var country = new List<string>();
+            var count = new List<string>();
+
+            foreach (var item in obj)
+            {
+                country.Add(item.Country.ToString());
+                count.Add(item.UserCount.ToString());
+            }
+
+            List<List<string>> data = new List<List<string>>() { country, count };
+            return Ok(data);
+        }
     }
 }

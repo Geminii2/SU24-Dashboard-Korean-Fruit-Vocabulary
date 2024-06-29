@@ -45,5 +45,8 @@ namespace Repository.AccountRepo
 
         public async Task<StatisticsItem> statisticsAgebyCustom(string ageRange, string startDate, string endDate)
         => await AccountDAO.GetInstance.CountAgebyCustom(ageRange, startDate, endDate);
+
+        public async Task<List<CountryCount>> CountCountry(int year)
+        => await AccountDAO.GetInstance.CountCountry(year);
     }
 }

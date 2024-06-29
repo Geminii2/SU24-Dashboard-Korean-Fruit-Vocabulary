@@ -36,5 +36,6 @@ namespace Repository.AccountRepo
         Task<List<StatisticsItem>> statisticsAgebyYear(string ageRange, string startDate, string endDate);
 
         Task<StatisticsItem> statisticsAgebyCustom(string ageRange, string startDate, string endDate);
+        Task<List<CountryCount>> CountCountry(int year);
     }
 }

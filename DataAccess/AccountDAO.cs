@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Sockets;
@@ -420,6 +421,40 @@ namespace DataAccess
                 }
             }
             return statistics;
+        }
+
+
+        public async Task<List<CountryCount>> CountCountry(int year)
+        {
+            var accounts = await GetAll();
+
+            var countryCounts = accounts.Where(a => a.Created_date != null && IsInDateRange(a.Created_date, year))
+                .GroupBy(a => a.Country).Select(g => new CountryCount
+                {
+                    Country = g.Key,
+                    UserCount = g.Count()
+                }).OrderByDescending(c => c.UserCount).ToList();
+
+
+            return countryCounts;
+
+        }
+
+        private bool IsInDateRange(string createdDate, int year)
+        {
+            DateTime startDate = new DateTime(year, 1, 1);
+            DateTime endDate = new DateTime(year, 12, 31);
+            var date = new DateTime();
+
+            if (createdDate!= null || createdDate!="")
+            {
+                date = DateTime.ParseExact(createdDate, "dd-MM-yyyy", null);
+            }
+            if (date >= startDate && date <= endDate)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

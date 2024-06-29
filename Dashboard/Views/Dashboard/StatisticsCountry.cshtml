@@ -94,19 +94,6 @@
                             <div class="text-center">
                                 <h3>Number of Users by Age and Gender</h3>
 
-                                <label  for="ageSelect">Age:</label>
-                                <select id="ageSelect" onchange="fetchData()">
-                                    <option value="0-99">All</option>
-                                    <option value="0-10">Less 10</option>
-                                    <option value="20-99">More 20</option>
-                                </select>
-
-                                <label class="ml-3" for="typeSelect">Type:</label>
-                                <select id="typeSelect" onchange="fetchData()">
-                                    <option value="month">Month</option>
-                                    <option value="quarter">Quarter</option>
-                                </select>
-
                                 <label class="ml-3" for="yearSelect">Year:</label>
                                 <select id="yearSelect" onchange="updateYearSelect()">
                                     <option value="2023">2023</option>
@@ -127,7 +114,7 @@
 </div>
 
 @* <script src="~/js/AgeChart.js"></script> *@
-<script src="~/js/chart/ageChart1.js"></script>
+<script src="~/js/chart/countryChart.js"></script>
 <script>
     function updateYearSelect() {
         const yearSelect = document.getElementById('yearSelect').value;
@@ -140,6 +127,6 @@
             fetchData();
         }
     }
-   
+
 
 </script>

@@ -76,17 +76,28 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
                    aria-controls="collapsePages">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Dashboard</span>
+                    <span>Statistics User by Age</span>
                 </a>
                 <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item @GetActiveClass("Dashboard", new[] { "Index"})" asp-controller="Dashboard" asp-action="Index">MonthAndQ</a>
-                        <a class="collapse-item @GetActiveClass("Dashboard", new[] { "YearAndCustom" })" asp-controller="Dashboard" asp-action="YearAndCustom">YearAndCustom</a>
+                        <a class="collapse-item @GetActiveClass("Dashboard", new[] { "Index"})" asp-controller="Dashboard" asp-action="Index">Month & Quarter</a>
+                        <a class="collapse-item @GetActiveClass("Dashboard", new[] { "YearAndCustom" })" asp-controller="Dashboard" asp-action="YearAndCustom">Year & Custom</a>
+
                     </div>
                 </div>
             </li>
+            <!-- Divider -->
+            <li>
+                <hr class="sidebar-divider">
+            </li>
 
+            <li class="nav-item @GetActiveClass("Dashboard", new[] { "StatisticsCountry" })">
+                <a class="nav-link" asp-controller="Dashboard" asp-action="StatisticsCountry">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Statistics Country</span>
+            </a>
+            </li>
 
             <!-- Divider -->
             <li>
