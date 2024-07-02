@@ -22,17 +22,18 @@
                                 <form class="user" asp-controller="Authentication" asp-action="Login" method="post">
                                     <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
                                     <div class="form-group">
-                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-user", placeholder = "Enter your Email", required = "required" })
+                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-user", placeholder = "Enter your Email" })
+                                        <span asp-validation-for="Email" class="text-danger"></span>
                                     </div>
                                     <div class="input-group">
-                                        @Html.PasswordFor(model => model.Pwd, new { @class = "form-control form-control-user", id = "password", placeholder = "Enter your Password", required = "required" ,style = "border-right: none;" })
+                                        @Html.PasswordFor(model => model.Pwd, new { @class = "form-control form-control-user", id = "password", placeholder = "Enter your Password" ,style = "border-right: none;" })
                                         <span class="input-group-text" style="background: none; border-top-right-radius: 25px; border-bottom-right-radius: 25px; border-left: none;">
                                             <i class="bi bi-eye-slash" id="togglePassword" style="cursor: pointer; background: no-repeat"></i>
                                         </span>
                                     </div>
-                                    <div style="margin-top:15px; margin-bottom:15px">
+                                    @* <div style="margin-top:15px; margin-bottom:15px">
                                         @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
-                                    </div>
+                                    </div> *@
                                     <div class="form-group text-ledt">
                                         <div class="custom-control custom-checkbox small">
                                             <input type="checkbox" class="custom-control-input" id="customCheck">

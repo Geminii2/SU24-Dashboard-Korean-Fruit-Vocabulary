@@ -38,9 +38,7 @@ function updateChart(data, year) {
     const newAccounts = data[1];
 
     // Cập nhật dữ liệu của biểu đồ hiện tại mà không tạo lại biểu đồ mới
-    //chart.data.labels = labels;
-    //chart.data.datasets[0].label = dataLabel;
-    //chart.data.datasets[0].data = dataTotal;
+    
     const newDatasets = newCountries.map((country, index) => ({
         label: country,
         data: [Number(newAccounts[index])],
@@ -60,67 +58,25 @@ function getRandomColor() {
     const b = Math.floor(Math.random() * 255);
     return `rgba(${r}, ${g}, ${b}, 0.2)`;
 }
-function createChart(labels) {
+function createChart(datas) {
     const ctx = document.getElementById('myChart').getContext('2d');
     if (chart) {
         chart.destroy();
     }
     chart = new Chart(ctx, {
         type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Vietnam',
-                    data: [5], // Số lượng tài khoản
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Belgium',
-                    data: [1],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Guatemala',
-                    data: [1],
-                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                    borderColor: 'rgba(255, 206, 86, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Antigua and Barbuda',
-                    data: [1],
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Bahrain',
-                    data: [1],
-                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Cambodia',
-                    data: [1],
-                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                    borderColor: 'rgba(255, 159, 64, 1)',
-                    borderWidth: 1
-                }
-            ]
-        },
+        data: datas,
         options: {
             responsive: true,
             scales: {
-                y: {
-                    min: 0,
-                    max: 100
-                }
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        precision: 0
+                    }
+                }]
             },
             legend: {
                 position: 'bottom'
@@ -131,30 +87,31 @@ function createChart(labels) {
 }
 
 
-//document.addEventListener('DOMContentLoaded', fetchData);
-
-//const labels = [
-//    'January', 'February', 'March', 'April', 'May', 'June',
-//    'July', 'August', 'September', 'October', 'November', 'December'
-//];
-
-const dataByYearAndAge = {
-    '2024': {
-        'Country': [
-            "Vietnam",
-            "Belgium",
-            "Guatemala",
-            "Antigua and Barbuda",
-            "Bahrain",
-            "Cambodia"
-        ],
-        'Total': [26, 34, 7, 12, 3, 15, 42, 19, 38, 68, 58, 39]
-        
-    }
-
-};
-
 // Tải dữ liệu mặc định khi trang được tải lần đầu
-document.addEventListener('DOMContentLoaded', function () {
-    createChart([2024]);
+document.addEventListener('DOMContentLoaded', async function () {
+
+    const formData = new FormData();
+    formData.append('yearSelect', '2023');
+
+    const response = await fetch('/Dashboard/GetAccountDataCountry', {
+        method: 'POST',
+        body: formData
+    });
+    const data = await response.json();
+    const countries = data[0];
+    const accounts = data[1];
+
+    const accountNumbers = accounts.map(Number);
+    const datas = {
+        labels: ['2023'], // Chỉ một nhãn duy nhất
+        datasets: countries.map((country, index) => ({
+            label: country,
+            data: [accountNumbers[index]], // Số lượng tài khoản
+            backgroundColor: getRandomColor(),
+            borderColor: getRandomColor().replace('0.2', '1'), // Đổi độ mờ từ 0.2 sang 1 để lấy màu viền đậm hơn
+            borderWidth: 1
+        }))
+    };
+
+    createChart(datas);
 });

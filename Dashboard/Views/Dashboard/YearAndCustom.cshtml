@@ -118,14 +118,15 @@
 
                                 <div  id="customYear" style="display:none">
                                     <label class="ml-3" for="start-date">Start year:</label>
-                                    <input type="number" id="start-year" name="start-date">
+                                    <input type="number" id="start-year" name="start-date" >
 
                                     <label class="ml-3" for="end-date">End year:</label>
                                     <input type="number" id="end-year" name="end-date">
 
                                     <input type="submit" value="Submit" onclick="fetchData()" />
-
                                 </div>
+                                <br />
+                                <span class="text-danger" id="checkCustomYear"></span>
 
                                 <div  id="customType" style="display:none">
                                     <label class="ml-3" for="start-date">Start date:</label>
@@ -137,7 +138,8 @@
                                     <input type="submit" value="Submit" onclick="fetchData()" />
 
                                 </div>
-
+                                <br />
+                                <span class="text-danger" id="checkCustomType"></span>
                                 
 
 

@@ -10,10 +10,34 @@ async function fetchData() {
     if (typeSelect === 'custom') {
         startDate = document.getElementById('start-date').value;
         endDate = document.getElementById('end-date').value;
+        var checkStart = new Date(startDate);
+        var checkEnd = new Date(endDate);
+
+        if (checkStart.getTime() > checkEnd.getTime()) {
+            document.getElementById('checkCustomType').innerHTML = "loi neeeeeeeeeeeeeeeee ";
+            return;
+        }
+
+        document.getElementById('checkCustomType').innerHTML = '';
+
+
+
     }
     if (yearSelect === 'custom') {
         startDate = "01-01-" + document.getElementById('start-year').value;
+        endDate = "12-31-" + document.getElementById('end-year').value;
+        var checkStart = new Date(startDate);
+        var checkEnd = new Date(endDate);
+
+        if (checkStart.getTime() > checkEnd.getTime()) {
+            document.getElementById('checkCustomYear').innerHTML = "loi neeeeeeeeeeeeeeeee ";
+            return;
+        }
+        document.getElementById('checkCustomYear').innerHTML = '';
         endDate = "31-12-" + document.getElementById('end-year').value;
+
+
+
     }
     const formData = new FormData();
     formData.append('yearSelect', yearSelect);
@@ -100,9 +124,14 @@ function createChart(labels, dataTotal, dataMale, dataFemale) {
         options: {
             responsive: true,
             scales: {
-                y: {
-                    beginAtZero: true
-                }
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        precision: 0
+                    }
+                }]
             },
             legend: {
                 position: 'bottom'
@@ -113,45 +142,25 @@ function createChart(labels, dataTotal, dataMale, dataFemale) {
 }
 
 
-//document.addEventListener('DOMContentLoaded', fetchData);
-
-const labels = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-];
-
-const dataByYearAndAge = {
-    '2023': {
-        '5-10': {
-            'Total': [22, 34, 7, 11, 5, 7, 38, 27, 42, 58, 49, 35],
-            'Male': [12, 19, 3, 5, 2, 3, 20, 15, 22, 30, 25, 18],
-            'Female': [10, 15, 4, 6, 3, 4, 18, 12, 20, 28, 24, 17]
-        },
-        '10-15': {
-            'Total': [26, 34, 7, 12, 3, 15, 42, 19, 38, 68, 58, 39],
-            'Male': [14, 18, 4, 6, 2, 8, 22, 10, 20, 35, 30, 20],
-            'Female': [12, 16, 3, 6, 1, 7, 20, 9, 18, 33, 28, 19]
-        },
-        '15-20': {
-            'Total': [19, 29, 9, 13, 5, 9, 34, 23, 48, 62, 54, 43],
-            'Male': [10, 15, 5, 7, 3, 5, 18, 12, 25, 32, 28, 22],
-            'Female': [9, 14, 4, 6, 2, 4, 16, 11, 23, 30, 26, 21]
-        },
-        '20-25': {
-            'Total': [15, 23, 6, 8, 4, 8, 28, 19, 34, 54, 48, 38],
-            'Male': [8, 12, 3, 4, 2, 4, 15, 10, 18, 28, 25, 20],
-            'Female': [7, 11, 3, 4, 2, 4, 13, 9, 16, 26, 23, 18]
-        },
-    }
-
-};
-
 // Tải dữ liệu mặc định khi trang được tải lần đầu
-document.addEventListener('DOMContentLoaded', function () {
-    const yearSelect = document.getElementById('yearSelect').value;
-    const dataTotal = dataByYearAndAge[2023]['10-15']['Total'];
-    const dataMale = dataByYearAndAge[2023]['10-15']['Male'];
-    const dataFemale = dataByYearAndAge[2023]['10-15']['Female'];
+document.addEventListener('DOMContentLoaded', async function () {
+
+
+    const formData = new FormData();
+    formData.append('yearSelect', 'all');
+    formData.append('typeSelect', 'year');
+    formData.append('ageSelect', '0-99');
+
+    const response = await fetch('/Dashboard/GetAccountDatabyYearAndCustom', {
+        method: 'POST',
+        body: formData
+    });
+    const data = await response.json();
+    const labels = data[0];
+    const dataTotal = data[1];
+    const dataMale = data[2];
+    const dataFemale = data[3];
+
 
     createChart(labels, dataTotal, dataMale, dataFemale);
 });

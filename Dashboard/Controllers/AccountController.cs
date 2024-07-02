@@ -25,7 +25,7 @@ namespace Dashboard.Controllers
             _mailSettings = mailSettingsOptions.Value;
         }
 
-       
+
         [HttpGet]
         public async Task<JsonResult> GetData()
         {
@@ -39,7 +39,7 @@ namespace Dashboard.Controllers
                     fullname = item.Fullname,
                     email = item.Email,
                     gender = item.Gender,
-                    dob = item.Dob.Replace("-","/"),
+                    dob = item.Dob.Replace("-", "/"),
                     status = item.Status,
                 });
 
@@ -131,7 +131,7 @@ namespace Dashboard.Controllers
                     fullname = item.Fullname,
                     email = item.Email,
                     gender = item.Gender,
-                    dob= item.Dob.Replace("-","/"),
+                    dob = item.Dob.Replace("-", "/"),
                 });
 
                 return Json(new { data = list });
@@ -163,6 +163,7 @@ namespace Dashboard.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAdmin(Admin? ad)
         {
             var accID = HttpContext.Session.GetInt32("Id");

@@ -103,6 +103,18 @@
             <li>
                 <hr class="sidebar-divider">
             </li>
+
+            <li class="nav-item @GetActiveClass("Dashboard", new[] { "StatisticsVocaFailed" })">
+                <a class="nav-link" asp-controller="Dashboard" asp-action="StatisticsVocaFailed">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Statistics Vocabulary Failed</span>
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <li>
+                <hr class="sidebar-divider">
+            </li>
             @if (roleID == 1)
             {
                 <!-- Nav Item - Admin -->

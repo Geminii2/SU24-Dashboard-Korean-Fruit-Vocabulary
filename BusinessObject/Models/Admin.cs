@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace BusinessObject.Models
     public class Admin
     {
         public Admin() { }
-        public Admin(int _Id, string _Email, string _Pwd, string _Fullname) 
+        public Admin(int _Id, string _Email, string _Pwd, string _Fullname)
         {
             Id = _Id;
             Email = _Email;
@@ -27,7 +28,10 @@ namespace BusinessObject.Models
         public int Role_id { get; set; }
         public string? Pwd { get; set; }
         public long Phone { get; set; }
+        [Required(ErrorMessage = "Please enter email")]
+
         public string? Email { get; set; }
+        [Required(ErrorMessage = "Please enter name")]
         public string? Fullname { get; set; }
         public string? Dob { get; set; }
         public string? Gender { get; set; }

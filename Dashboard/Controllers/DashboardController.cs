@@ -5,6 +5,8 @@ using Firebase.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Repository.AccountRepo;
+using Repository.VocabularyRepo;
+using System.Diagnostics.Metrics;
 using System.Reflection.Emit;
 using System.Security.Principal;
 
@@ -13,9 +15,11 @@ namespace Dashboard.Controllers
     public class DashboardController : Controller
     {
         private readonly IAccountRepository _accRepository;
-        public DashboardController(IAccountRepository accRepository)
+        private readonly IVocabularyRepository _vocabularyRepository;
+        public DashboardController(IAccountRepository accRepository, IVocabularyRepository vocabularyRepository)
         {
             _accRepository = accRepository;
+            _vocabularyRepository = vocabularyRepository;
         }
 
         public IActionResult Index()
@@ -156,6 +160,24 @@ namespace Dashboard.Controllers
             }
 
             List<List<string>> data = new List<List<string>>() { country, count };
+            return Ok(data);
+        }
+
+        public async Task<IActionResult> StatisticsVocaFailed()
+        {
+
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetVocabylaryDataFailed()
+        {
+            var voca = await _vocabularyRepository.GetTopIncorrectVocabularies();
+
+            var label = voca.labels.ToList();
+            var total = voca.totals.ToList();
+
+            List<List<string>> data = new List<List<string>>() { label, total };
             return Ok(data);
         }
     }
