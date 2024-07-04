@@ -24,6 +24,11 @@ namespace Dashboard.Controllers
 
         public IActionResult Index()
         {
+            var accID = HttpContext.Session.GetInt32("Id");
+            if (accID == null)
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
             return View();
         }
 
@@ -85,6 +90,11 @@ namespace Dashboard.Controllers
 
         public IActionResult YearAndCustom()
         {
+            var accID = HttpContext.Session.GetInt32("Id");
+            if (accID == null)
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
             return View();
         }
         [HttpPost]
@@ -135,6 +145,11 @@ namespace Dashboard.Controllers
         }
         public IActionResult StatisticsCountry()
         {
+            var accID = HttpContext.Session.GetInt32("Id");
+            if (accID == null)
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
             return View();
         }
 
@@ -165,7 +180,11 @@ namespace Dashboard.Controllers
 
         public async Task<IActionResult> StatisticsVocaFailed()
         {
-
+            var accID = HttpContext.Session.GetInt32("Id");
+            if (accID == null)
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
             return View();
         }
 

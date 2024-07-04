@@ -26,6 +26,7 @@
                                 @Html.TextBoxFor(model => model.Fullname, new { @class = "form-control", placeholder = "Enter Fullname" })
                                 <span asp-validation-for="Fullname" class="text-danger"></span>
                             </div>
+                            <span class="text-danger">@ViewData["isEmail"]</span>
                             @* <div style="margin-top:15px; margin-bottom:15px">
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
                             </div> *@

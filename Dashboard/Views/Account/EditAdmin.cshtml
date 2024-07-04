@@ -29,10 +29,13 @@
                             <div class="mb-3">
                                 <label>Email: </label>
                                 <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
                                 <label>Fullname: </label>
                                 <input asp-for="Fullname" class="form-control" />
+                                <span asp-validation-for="Fullname" class="text-danger"></span>
+
                             </div>
                             <button type="submit" class="btn btn-primary btn-block" style=" text-decoration:none; color: white">Save</button>
                             <button class="btn btn-secondary btn-block" style="text-decoration:none; color: white" asp-action="Admins">Close</button>

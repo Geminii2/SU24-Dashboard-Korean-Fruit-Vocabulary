@@ -33,8 +33,6 @@ namespace Dashboard.Controllers
             try
             {
 
-                //if (ModelState.IsValid)
-                //{
                 var loggedInAccount = await _accRepository.GetByEmail(account.Email);
 
                 var isValidCredentials = await _accRepository.Login(account.Email, account.Pwd);
@@ -61,18 +59,20 @@ namespace Dashboard.Controllers
                     return RedirectToAction("Index", "Dashboard");
                 }
 
-                ModelState.AddModelError("", "Invalid email or password");
-                //}
+                ViewData["Invalid"]="Invalid email or password";
+
             }
             catch (HttpRequestException ex)
             {
-                ModelState.AddModelError("", $"HttpRequestException: {ex.Message}");
+                //ModelState.AddModelError("", $"HttpRequestException: {ex.Message}");
+                return View("Error");
                 // Log or handle the exception
                 //Console.WriteLine($"HttpRequestException: {ex.Message}");
             }
             catch (SocketException ex)
             {
-                ModelState.AddModelError("", $"SocketException: {ex.Message}");
+                //ModelState.AddModelError("", $"SocketException: {ex.Message}");
+                return View("Error");
                 // Log or handle the exception
                 //Console.WriteLine($"SocketException: {ex.Message}");
             }

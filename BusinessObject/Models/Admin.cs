@@ -26,15 +26,23 @@ namespace BusinessObject.Models
         }
         public int Id { get; set; }
         public int Role_id { get; set; }
-        public string? Pwd { get; set; }
-        public long Phone { get; set; }
-        [Required(ErrorMessage = "Please enter email")]
 
+        [StringLength(6, ErrorMessage = "Password minimum lenght of 6 characters")]
+        [Required(ErrorMessage = "Please enter password")]
+        public string? Pwd { get; set; }
+
+        public long Phone { get; set; }
+
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Invalid email format")]
+        [Required(ErrorMessage = "Please enter email")]
         public string? Email { get; set; }
-        [Required(ErrorMessage = "Please enter name")]
+
+        [RegularExpression(@"^[A-Z]+[a-zA-Z\s\u00A1-\uFFFF]*$", ErrorMessage = "Invalid full name format")]
+        [Required(ErrorMessage = "Please enter full name")]
         public string? Fullname { get; set; }
         public string? Dob { get; set; }
         public string? Gender { get; set; }
+        [RegularExpression(@"^[A-Z]+[a-zA-Z\s\u00A1-\uFFFF]*$", ErrorMessage = "Invalid country format")]
         public string? Country { get; set; }
         public int Status { get; set; }
         public string? Avatar_img { get; set; }
