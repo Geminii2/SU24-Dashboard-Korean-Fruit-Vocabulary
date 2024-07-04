@@ -25,7 +25,7 @@ namespace Dashboard.Controllers
             _mailSettings = mailSettingsOptions.Value;
         }
 
-       
+
         [HttpGet]
         public async Task<JsonResult> GetData()
         {
@@ -39,7 +39,7 @@ namespace Dashboard.Controllers
                     fullname = item.Fullname,
                     email = item.Email,
                     gender = item.Gender,
-                    dob = item.Dob.Replace("-","/"),
+                    dob = item.Dob.Replace("-", "/"),
                     status = item.Status,
                 });
 
@@ -53,10 +53,10 @@ namespace Dashboard.Controllers
         public async Task<IActionResult> Index()
         {
             var accID = HttpContext.Session.GetInt32("Id");
-            //if (accID == null)
-            //{
-            //    return RedirectToAction("Login", "Authentication");
-            //}
+            if (accID == null)
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
 
             var accounts = await _accRepository.GetAll();
             return View(accounts);
@@ -131,7 +131,8 @@ namespace Dashboard.Controllers
                     fullname = item.Fullname,
                     email = item.Email,
                     gender = item.Gender,
-                    dob= item.Dob.Replace("-","/"),
+                    dob = item.Dob.Replace("-", "/"),
+                    status = item.Status,
                 });
 
                 return Json(new { data = list });
@@ -144,10 +145,10 @@ namespace Dashboard.Controllers
         public async Task<IActionResult> Admins()
         {
             var accID = HttpContext.Session.GetInt32("Id");
-            //if (accID == null)
-            //{
-            //    return RedirectToAction("Login", "Authentication");
-            //}
+            if (accID == null)
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
 
             var accounts = await _accRepository.GetAll();
             return View(accounts);
@@ -166,6 +167,7 @@ namespace Dashboard.Controllers
         public async Task<IActionResult> AddAdmin(Admin? ad)
         {
             var accID = HttpContext.Session.GetInt32("Id");
+
             if (accID == null)
             {
                 return RedirectToAction("Login", "Authentication");
@@ -182,7 +184,8 @@ namespace Dashboard.Controllers
                     bool isEmailInUse = await _accRepository.CheckExisted(ad.Email);
                     if (isEmailInUse)
                     {
-                        ModelState.AddModelError("", "This email is already registered.");
+                        //ModelState.AddModelError("", "This email is already registered.");
+                        ViewData["isEmail"] = "This email is already registered.";
                         return View(ad);
                     }
                     // Create a new user with email and password
@@ -201,17 +204,20 @@ namespace Dashboard.Controllers
                 }
                 catch (Firebase.Auth.FirebaseAuthException ex)
                 {
-                    ModelState.AddModelError("", "An error occurred during registration.");
+                    //ModelState.AddModelError("", "An error occurred during registration.");
+                    return View("Error");
                 }
                 catch (HttpRequestException ex)
                 {
-                    ModelState.AddModelError("", $"HttpRequestException: {ex.Message}");
+                    //ModelState.AddModelError("", $"HttpRequestException: {ex.Message}");
+                    return View("Error");
                     // Log or handle the exception
                     //Console.WriteLine($"HttpRequestException: {ex.Message}");
                 }
                 catch (SocketException ex)
                 {
-                    ModelState.AddModelError("", $"SocketException: {ex.Message}");
+                    //ModelState.AddModelError("", $"SocketException: {ex.Message}");
+                    return View("Error");
                     // Log or handle the exception
                     //Console.WriteLine($"SocketException: {ex.Message}");
                 }
@@ -300,8 +306,35 @@ namespace Dashboard.Controllers
                 // Handle the case where the account with the given ID doesn't exist
                 return NotFound();
             }
+            var invalid1 = "";
+            var invalid2 = "";
 
-            // Check if the current password matches the stored password
+            if (string.IsNullOrEmpty(currentPassword))
+            {
+                invalid1 ="Please current password.";
+                ViewData["Invalid1"]=invalid1;
+                ModelState.AddModelError("", "Current password is incorrect.");
+                if (string.IsNullOrEmpty(newPassword))
+                {
+                    invalid2 ="Please new password.";
+                    ViewData["Invalid2"]=invalid2;
+                    return View(account);
+                }
+                return View(account); // Redirect back to the change password page with an error message
+            }
+            if (!string.IsNullOrEmpty(currentPassword) && currentPassword.Length<6)
+            {
+                invalid1 ="Current password minimum length of 6.";
+                ViewData["Invalid1"]=invalid1;
+                if (!string.IsNullOrEmpty(newPassword) && newPassword.Length<6)
+                {
+                    invalid2 ="New password minimum length of 6.";
+                    ViewData["Invalid2"]=invalid2;
+                    return View(account);
+                }
+                return View(account);
+            }
+
             if (account.Pwd != currentPassword)
             {
                 ModelState.AddModelError("", "Current password is incorrect.");
@@ -332,7 +365,7 @@ namespace Dashboard.Controllers
 
                 if (obj != null)
                 {
-                    obj.Status = 2;
+                    obj.Status = 3;
 
                     await _accRepository.DeleteAdmin(obj);
                     return RedirectToAction("Admins");

@@ -58,10 +58,11 @@ namespace Dashboard.Controllers
                 }
 
                 var acc = await _accRepository.GetAdminById(id);
-
+                var date = DateTime.Parse(acc.Dob);
                 if (acc != null)
                 {
                     ViewData["AvatarImg"] = acc.Avatar_img;
+                    ViewData["Dob"]= date.ToString("yyyy-MM-dd");
                     return View(acc);
                 }
                 return RedirectToAction("Index", "Account");
@@ -83,7 +84,7 @@ namespace Dashboard.Controllers
             {
                 return RedirectToAction("Login", "Authentication");
             }
-            if(imageFile == null)
+            if (imageFile == null)
             {
                 avatar = admin.Avatar_img;
             }
@@ -93,19 +94,19 @@ namespace Dashboard.Controllers
             }
             DateTime dob = DateTime.Parse(admin.Dob);
             Admin ad = new Admin
-                {
-                    Id=admin.Id,
-                    Avatar_img= avatar,
-                    Country=admin.Country,
-                    Dob=dob.ToString("dd/MM/yyyy"),
-                    Email=admin.Email,
-                    Fullname=admin.Fullname,
-                    Gender=admin.Gender,
-                    Phone=admin.Phone,
-                    Pwd=admin.Pwd,
-                    Role_id=admin.Role_id,
-                    Status = admin.Status
-                };
+            {
+                Id=admin.Id,
+                Avatar_img= avatar,
+                Country=admin.Country,
+                Dob=dob.ToString("dd/MM/yyyy"),
+                Email=admin.Email,
+                Fullname=admin.Fullname,
+                Gender=admin.Gender,
+                Phone=admin.Phone,
+                Pwd=admin.Pwd,
+                Role_id=admin.Role_id,
+                Status = admin.Status
+            };
             await _accRepository.UpdateAdmin(ad);
             return RedirectToAction("Index");
 

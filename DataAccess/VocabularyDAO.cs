@@ -1,12 +1,12 @@
-﻿using BusinessObject.Models;
-using BusinessObject;
+﻿using BusinessObject;
+using BusinessObject.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using System.Net.Sockets;
 
 namespace DataAccess
 {
@@ -19,6 +19,8 @@ namespace DataAccess
         private static readonly object instanceLock = new object();
         public static LocalDAO localDAO = new LocalDAO();
         string dtb;
+        string dtbQ;
+        string dtbH;
         string bucket;
         public static VocabularyDAO GetInstance
         {
@@ -38,6 +40,8 @@ namespace DataAccess
         public VocabularyDAO()
         {
             dtb = firebaseSetup.databaseURL + "/Vocabulary/";
+            dtbQ= firebaseSetup.databaseURL +"/Question/";
+            dtbH= firebaseSetup.databaseURL +"/History/";
             bucket = firebaseSetup.storageBucket;
         }
 
@@ -45,7 +49,7 @@ namespace DataAccess
         {
             string databaseURL = dtb + ".json";
             List<Vocabulary> voca = await localDAO.GetAll<Vocabulary>(databaseURL);
-            var vocaList = voca.Where(v=> v.Status==1).ToList();
+            var vocaList = voca.Where(v => v.Status==1).ToList();
             return vocaList;
         }
 
@@ -126,6 +130,38 @@ namespace DataAccess
             }
             else return string.Empty;
         }
+
+        public async Task<(List<string> labels, List<string> totals)> GetTopIncorrectVocabularies()
+        {
+            string databaseVocaURL = dtb + ".json";
+            List<Vocabulary> vocabularies = await localDAO.GetAll<Vocabulary>(databaseVocaURL);
+
+            string databaseQuestURL = dtbQ + ".json";
+            List<Question> questions = await localDAO.GetAllString<Question>(databaseQuestURL);
+
+            string databaseHistoryURL = dtbH + ".json";
+            List<History> histories = await localDAO.GetAllString<History>(databaseHistoryURL);
+
+            var incorrectHistories = histories.Where(h => !h.Result).Select(h => h.Question_Id).ToList();
+
+            var incorrectQuestionCounts = incorrectHistories.GroupBy(qid => questions.First(q => q.Id == qid).Vocabulary_Id)
+                .Select(group => new
+                {
+                    VocabularyId = group.Key,
+                    Count = group.Count()
+                })
+                .OrderByDescending(g => g.Count)
+                .ToList();
+            var topVocabularies = vocabularies.Where(v => incorrectQuestionCounts.Any(iqc => iqc.VocabularyId == v.Id))
+                .ToDictionary(v => v.Id, v => v.English);
+
+            var labels = incorrectQuestionCounts.Select(iqc => topVocabularies[iqc.VocabularyId]).ToList();
+            var totals = incorrectQuestionCounts.Select(iqc => iqc.Count.ToString()).ToList();
+
+            return (labels, totals);
+
+        }
+
     }
 }
 

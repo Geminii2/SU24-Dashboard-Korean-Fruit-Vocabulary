@@ -34,7 +34,7 @@ namespace Dashboard.Controllers
                 {
                     id = item.Id,
                     email = account.FirstOrDefault(e => e.Id== item.Account_Id)?.Email,
-                    type= item.Type,
+                    type = item.Type,
                     description = item.Description,
                     created = item.Created_date,
                     status = item.Status,
@@ -51,10 +51,10 @@ namespace Dashboard.Controllers
         public async Task<IActionResult> Index()
         {
             var accID = HttpContext.Session.GetInt32("Id");
-            //if (accID == null)
-            //{
-            //    return RedirectToAction("Login", "Authentication");
-            //}
+            if (accID == null)
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
 
             var gen_feedback = await _general_FeedbackRepository.GetAll();
             return View(gen_feedback);
@@ -104,8 +104,13 @@ namespace Dashboard.Controllers
             return View(gen_fb);
         }
         [HttpPost]
-        public async Task<IActionResult> Reply( string id,string email, string name, string title, string body)
+        public async Task<IActionResult> Reply(string id, string email, string name, string title, string body)
         {
+            var accID = HttpContext.Session.GetInt32("Id");
+            if (accID == null)
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
             var gen_fb = await _general_FeedbackRepository.GetById(id);
             gen_fb.Status=2;
             await _general_FeedbackRepository.UpdateVoca(gen_fb);

@@ -21,5 +21,7 @@ namespace Repository.VocabularyRepo
         Task<string> AddVoiceVie(int id, string name, IFormFile voiceVieFile);
         Task<string> AddVoiceEng(int id, string name, IFormFile voiceEngFile);
         Task<string> AddVoiceKor(int id, string name, IFormFile voiceKorFile);
+
+        Task<(List<string> labels, List<string> totals)> GetTopIncorrectVocabularies();
     }
 }

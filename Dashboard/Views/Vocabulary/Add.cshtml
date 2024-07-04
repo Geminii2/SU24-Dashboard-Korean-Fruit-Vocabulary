@@ -9,7 +9,7 @@
     <main role="main" class="pb-3">
         <div class="card shadow mb-4">
             @* <div class="card-header py-3">
-                <h2 class="m-0 font-weight-bold text-black">Add</h2>
+            <h2 class="m-0 font-weight-bold text-black">Add</h2>
             </div> *@
             <div class="card-body ">
                 <div class="row">
@@ -20,35 +20,44 @@
                             </div>
                             <div class="text-center">
                                 <img id="output" src="/images/bo-2.png" style="height:300px; width:300px;" />
-                                <input type="file" accept="image/*" name="imgFile" class="form-control" onchange="loadFile(event)">
+                                <input id="inputImg" type="file" accept="image/*" name="imgFile" class="form-control" onchange="loadFile(event); validImg()">
                             </div>
+                            <span id="checkImg" class="text-danger"></span>
+                            <br />
                             <label>Word - English</label>
                             <div class="form-group">
                                 @Html.TextBoxFor(model => model.English, new { @class = "form-control ", placeholder = "Enter Word English", required = "required" })
+                                <span asp-validation-for="English" class="text-danger"></span>
                             </div>
                             <label>Word - Vietnamese</label>
                             <div class="form-group">
                                 @Html.TextBoxFor(model => model.Vietnamese, new { @class = "form-control ", placeholder = "Enter Word Vietnamese", required = "required" })
+                                <span asp-validation-for="Vietnamese" class="text-danger"></span>
                             </div>
                             <label>Word - Korean</label>
                             <div class="form-group">
                                 @Html.TextBoxFor(model => model.Korean, new { @class = "form-control ", placeholder = "Enter Word Korean", required = "required" })
+                                <span asp-validation-for="Korean" class="text-danger"></span>
                             </div>
                             <label>Spelling</label>
                             <div class="form-group">
                                 @Html.TextBoxFor(model => model.Spelling, new { @class = "form-control ", placeholder = "Enter Spelling", required = "required" })
+                                <span asp-validation-for="Spelling" class="text-danger"></span>
                             </div>
                             <label>Description - English</label>
                             <div class="form-group">
                                 @Html.TextAreaFor(model => model.Example_EN, new { @class = "form-control ", placeholder = "Enter Description English", required = "required" })
+                                <span asp-validation-for="Example_EN" class="text-danger"></span>
                             </div>
                             <label>Description - Vietnamese</label>
                             <div class="form-group">
                                 @Html.TextAreaFor(model => model.Example_VN, new { @class = "form-control ", placeholder = "Enter Description Vietnamese", required = "required" })
+                                <span asp-validation-for="Example_VN" class="text-danger"></span>
                             </div>
                             <label>Description - Korean</label>
                             <div class="form-group">
                                 @Html.TextAreaFor(model => model.Example_KR, new { @class = "form-control ", placeholder = "Enter Description Korean", required = "required" })
+                                <span asp-validation-for="Example_KR" class="text-danger"></span>
                             </div>
                             <div class="row">
                                 <div class="col-md-3 d-flex justify-content-start align-items-center">
@@ -57,22 +66,28 @@
                                 <div class="col-md-9">
                                     <div class="d-flex ">
                                         <p class="mt-2 mr-3 fw-bold">ENG</p>
-                                        <input type="file" accept="audio/mp3" name="voiceEngFile" class="form-control" />
+                                        <input id="inputvoiceEN" type="file" accept="audio/mp3" name="voiceEngFile" class="form-control" onchange="validvoiceEN()" />
                                     </div>
+                                    <span id="checkvoiceEN" class="text-danger text-left"></span>
+
                                     <div class="d-flex">
                                         <p class="mt-2 mr-4 fw-bold">VIE</p>
-                                        <input type="file" accept="audio/mp3" name="voiceVieFile" class="form-control" />
+                                        <input id="inputvoiceVN" type="file" accept="audio/mp3" name="voiceVieFile" class="form-control" onchange="validvoiceVN()" />
                                     </div>
+                                    <span id="checkvoiceVN" class="text-danger text-left"></span>
+
                                     <div class="d-flex">
                                         <p class="mt-2 mr-3 fw-bold">KOR</p>
-                                        <input type="file" accept="audio/mp3" name="voiceKorFile" class="form-control" />
+                                        <input id="inputvoiceKR" type="file" accept="audio/mp3" name="voiceKorFile" class="form-control" onchange="validvoiceKN()" />
                                     </div>
+                                    <span id="checkvoiceKR" class="text-danger text-left"></span>
+
                                 </div>
                             </div>
-                            <div style="margin-top:15px; margin-bottom:15px">
-                                @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
-                            </div>
-                            <button type="submit" class="btn btn-success btn-block" style=" text-decoration:none; color: white; margin-bottom: 10px;">Create New Vocabulary</button>
+                            @* <div style="margin-top:15px; margin-bottom:15px">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
+                            </div> *@
+                            <button type="submit" class="btn btn-success btn-block" onclick="validImg();validvoiceEN();validvoiceKR();validvoiceVN()" style=" text-decoration:none; color: white; margin-bottom: 10px;">Create New Vocabulary</button>
                         </form>
                         <a class="btn btn-secondary btn-block" style="text-decoration:none; color: white" asp-action="Index">Close</a>
                     </div>
@@ -91,5 +106,42 @@
             URL.revokeObjectURL(output.src) // free memory
         }
     };
+    function validImg() {
+        const inputImg = document.getElementById('inputImg').value;
+        if (inputImg.toString() == 0) {
+            document.getElementById('checkImg').innerHTML = "Please upload file image ";
+            return;
+        } else {
+            document.getElementById('checkImg').innerHTML = "";
+        }
+    }
+    function validvoiceVN() {
+        const inputvoiceVN = document.getElementById('inputvoiceVN').value;
+        if (inputvoiceVN.toString() == 0) {
+            document.getElementById('checkvoiceVN').innerHTML = "Please upload file voice Vietnamese ";
+            return;
+        } else {
+            document.getElementById('checkvoiceVN').innerHTML = "";
+        }
+    }
+    function validvoiceEN() {
+        const inputvoiceEN = document.getElementById('inputvoiceEN').value;
 
+        if (inputvoiceEN.toString() == 0) {
+            document.getElementById('checkvoiceEN').innerHTML = "Please upload file voice English ";
+            return;
+        } else {
+            document.getElementById('checkvoiceEN').innerHTML = "";
+        }
+    }
+    function validvoiceKR() {
+        const inputvoiceKR = document.getElementById('inputvoiceKR').value;
+        if (inputvoiceKR.toString() == 0) {
+            document.getElementById('checkvoiceKR').innerHTML = "Please upload file voice Korean ";
+            return;
+        } else {
+            document.getElementById('checkvoiceKR').innerHTML = "";
+        }
+
+    }
 </script>

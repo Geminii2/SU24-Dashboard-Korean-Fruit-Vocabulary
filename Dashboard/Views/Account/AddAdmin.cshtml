@@ -14,17 +14,22 @@
                 <div class="row">
                     <div>
                         <form class="user" asp-controller="Account" asp-action="AddAdmin">
+
                             <label>Email</label>
                             <div class="form-group">
-                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Enter Email", required = "required", type = "email" })
+                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Enter Email", type = "email" })
+                                <span asp-validation-for="Email" class="text-danger"></span>
+
                             </div>
                             <label>Fullname</label>
                             <div class="form-group">
-                                @Html.TextBoxFor(model => model.Fullname, new { @class = "form-control", placeholder = "Enter Fullname", required = "required" })
+                                @Html.TextBoxFor(model => model.Fullname, new { @class = "form-control", placeholder = "Enter Fullname" })
+                                <span asp-validation-for="Fullname" class="text-danger"></span>
                             </div>
-                            <div style="margin-top:15px; margin-bottom:15px">
+                            <span class="text-danger">@ViewData["isEmail"]</span>
+                            @* <div style="margin-top:15px; margin-bottom:15px">
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
-                            </div>
+                            </div> *@
                             <button type="submit" class="btn btn-success btn-block" style="text-decoration:none; color: white; margin-bottom: 5px;">Create New Account</button>
                         </form>
                         <a class="btn btn-secondary btn-block" style="text-decoration:none; color: white; margin-top: 5px;" asp-action="Admins">Close</a>
