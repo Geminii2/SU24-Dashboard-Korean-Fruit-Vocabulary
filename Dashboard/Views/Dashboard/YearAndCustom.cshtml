@@ -18,7 +18,7 @@
                                 <div class="text-xl font-weight-bold text-primary mb-2 ml-3">
                                     Admin
                                 </div>
-                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">5</div>
+                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">@ViewData["totalAdmin"]</div>
                             </div>
                             <div class="col-auto mr-3">
                                 <i class="fas fa-user-cog fa-2x "></i>
@@ -37,7 +37,7 @@
                                 <div class="text-xl font-weight-bold text-success mb-2 ml-3">
                                     User
                                 </div>
-                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">13</div>
+                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">@ViewData["totalAccount"]</div>
                             </div>
                             <div class="col-auto mr-3">
                                 <i class="fas fa-user fa-2x"></i>
@@ -56,7 +56,7 @@
                                 <div class="text-xl font-weight-bold text-info mb-2 ml-3">
                                     Vocabulary
                                 </div>
-                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">50</div>
+                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">@ViewData["totalVocabulary"]</div>
                             </div>
                             <div class="col-auto mr-3">
                                 <i class="fas fa-book-open fa-2x "></i>
@@ -75,7 +75,7 @@
                                 <div class="text-xl font-weight-bold text-warning mb-2 ml-3">
                                     Feedback
                                 </div>
-                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">10</div>
+                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">@ViewData["totalFeedback"]</div>
                             </div>
                             <div class="col-auto mr-3">
                                 <i class="fas fa-comment-alt fa-2x "></i>
@@ -84,72 +84,75 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="row">
+        <div class="row">
 
-                <!-- Area Chart -->
-                <div>
-                    <div class="card shadow mb-4">
-                        <div class="card-body">
-                            <div class="text-center">
-                                <h3>Number of Users by Age and Gender</h3>
+            <!-- Area Chart -->
+            <div>
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <h3>Number of Users by Age and Gender</h3>
 
-                                <label for="ageSelect">Age:</label>
-                                <select id="ageSelect" onchange="fetchData()">
-                                    <option value="0-99">All</option>
-                                    <option value="0-10">Less 10</option>
-                                    <option value="20-99">More 20</option>
-                                </select>
+                            <span for="ageSelect">Age:</span>
+                            <select id="ageSelect" onchange="fetchData()">
+                                <option value="0-99">All</option>
+                                <option value="0-10">Less 10</option>
+                                <option value="20-99">More 20</option>
+                            </select>
 
-                                <label class="ml-3" for="typeSelect">Type:</label>
-                                <select id="typeSelect" onchange="updateTypeSelect()">
-                                    <option value="year">Year</option>
+                            <span class="ml-3" for="typeSelect">Type:</span>
+                            <select id="typeSelect" onchange="updateTypeSelect()">
+                                <option value="year">Year</option>
+                                <option value="custom">Custom</option>
+                            </select>
+
+                            <div class="d-inline-block" id="yearType" style="display:none">
+                                <span class="ml-3">Year</span>
+                                <select id="yearSelect" onchange="updateYearSelect()">
+                                    <option value="all">All years</option>
+                                    <option value="2year">The last 2 years</option>
                                     <option value="custom">Custom</option>
                                 </select>
-
-                                <div class="d-inline-block" id="yearType" style="display:none">
-                                    <label class="ml-3">Year</label>
-                                    <select id="yearSelect" onchange="updateYearSelect()">
-                                        <option value="all">All years</option>
-                                        <option value="2year">The last 2 years</option>
-                                        <option value="custom">Custom</option>
-                                    </select>
-                                </div>
-
-                                <div  id="customYear" style="display:none">
-                                    <label class="ml-3" for="start-date">Start year:</label>
-                                    <input type="number" id="start-year" name="start-date" >
-
-                                    <label class="ml-3" for="end-date">End year:</label>
-                                    <input type="number" id="end-year" name="end-date">
-
-                                    <input type="submit" value="Submit" onclick="fetchData()" />
-                                </div>
-                                <br />
-                                <span class="text-danger" id="checkCustomYear"></span>
-
-                                <div  id="customType" style="display:none">
-                                    <label class="ml-3" for="start-date">Start date:</label>
-                                    <input type="date" id="start-date" name="start-date">
-
-                                    <label class="ml-3" for="end-date">End date:</label>
-                                    <input type="date" id="end-date" name="end-date">
-
-                                    <input type="submit" value="Submit" onclick="fetchData()" />
-
-                                </div>
-                                <br />
-                                <span class="text-danger" id="checkCustomType"></span>
-                                
-
-
-                                <canvas id="myChart" style="border:none;"></canvas>
                             </div>
+
+                            <div id="customYear" style="display:none">
+                                <span class="ml-3" for="start-date">Start year:</span>
+                                <input type="number" id="start-year" name="start-date" >
+                                <span class="text-danger" id="checkStarYear"></span>
+
+                                <span class="ml-3" for="end-date">End year:</span>
+                                <input type="number" id="end-year" name="end-date" >
+                                <span class="text-danger" id="checkEndYear"></span>
+
+                                <input type="submit" value="Submit" onclick="fetchData()" />
+                            </div>
+                            <br />
+                            <span class="text-danger" id="checkCustomYear"></span>
+
+                            <div id="customType" style="display:none">
+                                <span class="ml-3" for="start-date">Start date:</span>
+                                <input type="date" id="start-date" name="start-date" >
+
+                                <span class="ml-3" for="end-date">End date:</span>
+                                <input type="date" id="end-date" name="end-date" >
+
+                                <input type="submit" value="Submit" onclick="fetchData()" />
+
+                            </div>
+                            <br />
+                            <span class="text-danger" id="checkCustomType"></span>
+
+
+
+                            <canvas id="myChart" style="border:none;"></canvas>
                         </div>
                     </div>
                 </div>
-
             </div>
+
+        </div>
     </main>
 </div>
 
@@ -165,9 +168,12 @@
             customType.className = "d-inline-block";
             yearType.className = "";
             customYear.className = "";
+            document.getElementById('checkCustomYear').innerHTML = '';
         } else {
             customType.className = "";
+            document.getElementById('checkCustomType').innerHTML = '';
             yearType.className = "d-inline-block";
+
             //fetchData();
         }
 
@@ -177,12 +183,13 @@
         const customYear = document.getElementById('customYear');
         if (yearSelect === 'custom') {
             customYear.className = "d-inline-block";
-
+            document.getElementById('checkCustomType').innerHTML = '';
         } else {
             customYear.className = "";
+            document.getElementById('checkCustomYear').innerHTML = '';
             fetchData();
         }
     }
 
-
+    
 </script>

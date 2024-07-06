@@ -12,9 +12,26 @@ async function fetchData() {
         endDate = document.getElementById('end-date').value;
         var checkStart = new Date(startDate);
         var checkEnd = new Date(endDate);
+        //// Kiểm tra nếu ngày bắt đầu và ngày kết thúc nằm trong khoảng từ 1/1/1900 đến 31/12/3000
+        var minDate = new Date("01-01-1900");
+        var maxDate = new Date("12-31-3000");
+
+        if (checkStart.getTime() < minDate.getTime() || checkStart.getTime() > maxDate.getTime()) {
+            document.getElementById('checkCustomType').innerHTML = "The start date must be between 01/01/1900 and 31/12/3000";
+            return;
+        }
+
+        if (checkEnd.getTime() < minDate.getTime() || checkEnd.getTime() > maxDate.getTime()) {
+            document.getElementById('checkCustomType').innerHTML = "The end date must be between 01/01/1900 and 31/12/3000";
+            return;
+        }
+
+        document.getElementById('checkCustomType').innerHTML = '';
+
+
 
         if (checkStart.getTime() > checkEnd.getTime()) {
-            document.getElementById('checkCustomType').innerHTML = "loi neeeeeeeeeeeeeeeee ";
+            document.getElementById('checkCustomType').innerHTML = "The start date must be less than the end date";
             return;
         }
 
@@ -24,19 +41,32 @@ async function fetchData() {
 
     }
     if (yearSelect === 'custom') {
+
+        startYear = parseInt(document.getElementById('start-year').value);
+        endYear = parseInt(document.getElementById('end-year').value)
+        if (startYear < 1900 || startYear > 3000) {
+            document.getElementById('checkCustomYear').innerHTML = "The start year must be between 1900 and 3000";
+            return;
+        }
+        if (endYear < 1900 || endYear > 3000) {
+            document.getElementById('checkCustomYear').innerHTML = "The end year must be between 1900 and 3000";
+            return;
+        }
+        document.getElementById('checkCustomYear').innerHTML = '';
+
         startDate = "01-01-" + document.getElementById('start-year').value;
         endDate = "12-31-" + document.getElementById('end-year').value;
         var checkStart = new Date(startDate);
         var checkEnd = new Date(endDate);
-
+        // Kiểm tra nếu ngày bắt đầu lớn hơn ngày kết thúc
         if (checkStart.getTime() > checkEnd.getTime()) {
-            document.getElementById('checkCustomYear').innerHTML = "loi neeeeeeeeeeeeeeeee ";
+            document.getElementById('checkCustomYear').innerHTML = "The start year must be less than the end year";
             return;
         }
         document.getElementById('checkCustomYear').innerHTML = '';
         endDate = "31-12-" + document.getElementById('end-year').value;
 
-
+       
 
     }
     const formData = new FormData();

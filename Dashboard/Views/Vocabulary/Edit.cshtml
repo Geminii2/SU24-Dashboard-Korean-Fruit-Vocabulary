@@ -28,7 +28,20 @@
                                 {
                                     <img id="output" src="/images/bo-2.png" class="text-center" style="height:300px; width:300px;" />
                                 }
-                                <input type="file" accept="image/*" name="imgFile" class="form-control" onchange="loadFile(event)">
+                            </div>
+                            <div class="row">
+                            <div class="col-md-6">
+                                <div class="md-3">
+                                    <label>New fruit image file</label>
+                                    <input type="file" accept="image/*" name="imgFile" class="form-control" onchange="loadFile(event)">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="md-3">
+                                    <label>Current fruit image file</label>
+                                    <input asp-for="Fruits_img" class="form-control" readonly>
+                                </div>
+                            </div>
                             </div>
                             <label>Word - English</label>
                             <div class="form-group">
@@ -59,10 +72,10 @@
                                 <input asp-for="Example_KR" class="form-control" />
                             </div>
                             <div class="row">
-                                <div class="col-md-3 d-flex justify-content-start align-items-center">
-                                    <label class="mt-4">Sound</label>
+                                <div class="col-md-2 d-flex justify-content-start align-items-center">
+                                    <label class="mt-4">New sound</label>
                                 </div>
-                                <div class="col-md-9">
+                                <div class="col-md-4">
                                     <div class="d-flex ">
                                         <p class="mt-2 mr-3 fw-bold">ENG</p>
                                         <input value="@Model.Voice_EN" type="file" accept="audio/mp3" name="voiceEngFile" class="form-control" />
@@ -74,6 +87,23 @@
                                     <div class="d-flex">
                                         <p class="mt-2 mr-3 fw-bold">KOR</p>
                                         <input value="@Model.Voice_KR" type="file" accept="audio/mp3" name="voiceKorFile" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2 d-flex justify-content-start align-items-center">
+                                    <label class="mt-4">Current sound</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="d-flex ">
+                                        <p class="mt-2 mr-3 fw-bold">ENG</p>
+                                        <input asp-for="Voice_EN" class="form-control" readonly/>
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="mt-2 mr-4 fw-bold">VIE</p>
+                                        <input asp-for="Voice_VN" class="form-control" readonly />
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="mt-2 mr-3 fw-bold">KOR</p>
+                                        <input asp-for="Voice_KR" class="form-control" readonly />
                                     </div>
                                 </div>
                             </div>

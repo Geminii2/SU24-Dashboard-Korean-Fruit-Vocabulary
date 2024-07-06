@@ -18,7 +18,7 @@
                                 <div class="text-xl font-weight-bold text-primary mb-2 ml-3">
                                     Admin
                                 </div>
-                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">5</div>
+                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">@ViewData["totalAdmin"]</div>
                             </div>
                             <div class="col-auto mr-3">
                                 <i class="fas fa-user-cog fa-2x "></i>
@@ -37,7 +37,7 @@
                                 <div class="text-xl font-weight-bold text-success mb-2 ml-3">
                                     User
                                 </div>
-                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">13</div>
+                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">@ViewData["totalAccount"]</div>
                             </div>
                             <div class="col-auto mr-3">
                                 <i class="fas fa-user fa-2x"></i>
@@ -56,7 +56,7 @@
                                 <div class="text-xl font-weight-bold text-info mb-2 ml-3">
                                     Vocabulary
                                 </div>
-                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">50</div>
+                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">@ViewData["totalVocabulary"]</div>
                             </div>
                             <div class="col-auto mr-3">
                                 <i class="fas fa-book-open fa-2x "></i>
@@ -75,7 +75,7 @@
                                 <div class="text-xl font-weight-bold text-warning mb-2 ml-3">
                                     Feedback
                                 </div>
-                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">10</div>
+                                <div class="h5 mb-2 ml-3 font-weight-bold text-gray-800">@ViewData["totalFeedback"]</div>
                             </div>
                             <div class="col-auto mr-3">
                                 <i class="fas fa-comment-alt fa-2x "></i>
@@ -84,32 +84,33 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="row">
+        <div class="row">
 
-                <!-- Area Chart -->
-                <div>
-                    <div class="card shadow mb-4">
-                        <div class="card-body">
-                            <div class="text-center">
-                                <h3>Number of Users by Age and Gender</h3>
+            <!-- Area Chart -->
+            <div>
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <h3>Number of Users by Country</h3>
 
-                                <label class="ml-3" for="yearSelect">Year:</label>
-                                <select id="yearSelect" onchange="updateYearSelect()">
-                                    <option value="2023">2023</option>
-                                    <option value="2024">2024</option>
-                                    <option value="custom">Custom</option>
-                                </select>
-                                <input type="number" id="customYear" style="display:none;" placeholder="Input year" onchange="fetchData()">
+                            <span class="ml-3" for="yearSelect">Year:</span>
+                            <select id="yearSelect" onchange="updateYearSelect()">
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                            <input type="number" id="customYear" style="display:none;" placeholder="Input year" onchange="fetchData()">
+                            <span class="text-danger" id="checkCustomYear"></span>
 
-
-                                <canvas id="myChart" style="border:none;"></canvas>
-                            </div>
+                            <canvas id="myChart" style="border:none;"></canvas>
                         </div>
                     </div>
                 </div>
-
             </div>
+
+        </div>
     </main>
 </div>
 
@@ -124,6 +125,7 @@
 
         } else {
             customYear.className = "";
+            document.getElementById('checkCustomYear').innerHTML = "";
             fetchData();
         }
     }

@@ -8,6 +8,12 @@ async function fetchData() {
     let customYears = 0;
     if (yearSelect === 'custom') {
         customYears = parseInt(document.getElementById('customYear').value);
+        if (customYears < 1900 || customYears > 3000)
+        {
+            document.getElementById('checkCustomYear').innerHTML = "Enter the year range from 1900 to 3000";
+            return;
+        }
+        document.getElementById('checkCustomYear').innerHTML = "";
     }
     const formData = new FormData();
     formData.append('yearSelect', yearSelect);

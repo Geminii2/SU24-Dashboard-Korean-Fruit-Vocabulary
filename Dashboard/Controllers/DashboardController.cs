@@ -5,6 +5,8 @@ using Firebase.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Repository.AccountRepo;
+using Repository.Feedback_VocaRepo;
+using Repository.General_FeedbackRepo;
 using Repository.VocabularyRepo;
 using System.Diagnostics.Metrics;
 using System.Reflection.Emit;
@@ -16,19 +18,35 @@ namespace Dashboard.Controllers
     {
         private readonly IAccountRepository _accRepository;
         private readonly IVocabularyRepository _vocabularyRepository;
-        public DashboardController(IAccountRepository accRepository, IVocabularyRepository vocabularyRepository)
+        private readonly IFeedback_VocaRepository _feedbackVocaRepository;
+        private readonly IGeneral_FeedbackRepository _generalFeedbackRepository;
+        public DashboardController(IAccountRepository accRepository, IVocabularyRepository vocabularyRepository,
+            IFeedback_VocaRepository feedback_VocaRepository, IGeneral_FeedbackRepository general_FeedbackRepository)
         {
             _accRepository = accRepository;
             _vocabularyRepository = vocabularyRepository;
+            _feedbackVocaRepository = feedback_VocaRepository;
+            _generalFeedbackRepository = general_FeedbackRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var accID = HttpContext.Session.GetInt32("Id");
             if (accID == null)
             {
                 return RedirectToAction("Login", "Authentication");
             }
+            var account = await _accRepository.GetAll();
+            var admin = await _accRepository.GetAllAdmin();
+            var voca = await _vocabularyRepository.GetAll();
+            var fbvoca = await _feedbackVocaRepository.GetAll();
+            var genfb = await _generalFeedbackRepository.GetAll();
+
+            ViewData["totalAccount"]= account.Count();
+            ViewData["totalAdmin"]= admin.Count();
+            ViewData["totalVocabulary"]= voca.Count();
+            ViewData["totalFeedback"]= fbvoca.Count() + genfb.Count();
+
             return View();
         }
 
@@ -88,13 +106,24 @@ namespace Dashboard.Controllers
 
         }
 
-        public IActionResult YearAndCustom()
+        public async Task<IActionResult> YearAndCustom()
         {
             var accID = HttpContext.Session.GetInt32("Id");
             if (accID == null)
             {
                 return RedirectToAction("Login", "Authentication");
             }
+
+            var account = await _accRepository.GetAll();
+            var admin = await _accRepository.GetAllAdmin();
+            var voca = await _vocabularyRepository.GetAll();
+            var fbvoca = await _feedbackVocaRepository.GetAll();
+            var genfb = await _generalFeedbackRepository.GetAll();
+
+            ViewData["totalAccount"]= account.Count();
+            ViewData["totalAdmin"]= admin.Count();
+            ViewData["totalVocabulary"]= voca.Count();
+            ViewData["totalFeedback"]= fbvoca.Count() + genfb.Count();
             return View();
         }
         [HttpPost]
@@ -143,13 +172,23 @@ namespace Dashboard.Controllers
 
             return Ok(obj2);
         }
-        public IActionResult StatisticsCountry()
+        public async Task<IActionResult> StatisticsCountry()
         {
             var accID = HttpContext.Session.GetInt32("Id");
             if (accID == null)
             {
                 return RedirectToAction("Login", "Authentication");
             }
+            var account = await _accRepository.GetAll();
+            var admin = await _accRepository.GetAllAdmin();
+            var voca = await _vocabularyRepository.GetAll();
+            var fbvoca = await _feedbackVocaRepository.GetAll();
+            var genfb = await _generalFeedbackRepository.GetAll();
+
+            ViewData["totalAccount"]= account.Count();
+            ViewData["totalAdmin"]= admin.Count();
+            ViewData["totalVocabulary"]= voca.Count();
+            ViewData["totalFeedback"]= fbvoca.Count() + genfb.Count();
             return View();
         }
 
@@ -185,6 +224,16 @@ namespace Dashboard.Controllers
             {
                 return RedirectToAction("Login", "Authentication");
             }
+            var account = await _accRepository.GetAll();
+            var admin = await _accRepository.GetAllAdmin();
+            var voca = await _vocabularyRepository.GetAll();
+            var fbvoca = await _feedbackVocaRepository.GetAll();
+            var genfb = await _generalFeedbackRepository.GetAll();
+
+            ViewData["totalAccount"]= account.Count();
+            ViewData["totalAdmin"]= admin.Count();
+            ViewData["totalVocabulary"]= voca.Count();
+            ViewData["totalFeedback"]= fbvoca.Count() + genfb.Count();
             return View();
         }
 
