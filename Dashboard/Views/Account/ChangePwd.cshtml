@@ -1,7 +1,7 @@
 ﻿@model BusinessObject.Models.Admin
 
 @{
-    ViewData["Title"] = "AddAdmin";
+    ViewData["Title"] = "Change Password";
     Layout = "_Dashboard";
 
 }
@@ -17,21 +17,24 @@
                         <form class="user" asp-controller="Account" asp-action="ChangePwd" >
                             <div class="form-group">
                                 <label for="currentPassword">Current Password:</label>
-                                <input type="password" id="currentPassword" name="currentPassword" class="form-control" required />
+                                <input type="password" id="currentPassword" name="currentPassword" class="form-control"/>
+                                <span class="text-danger">@ViewData["Invalid1"] </span>
                             </div>
                             <div class="form-group">
                                 <label for="newPassword">New Password:</label>
-                                <input type="password" id="newPassword" name="newPassword" class="form-control" required />
+                                <input type="password" id="newPassword" name="newPassword" class="form-control"  />
+                                <span class="text-danger">@ViewData["Invalid2"]</span>
                             </div>
                             <div class="form-group">
                                 <label for="confirmPassword">Confirm Password:</label>
-                                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required />
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"  />
                             </div>
                             <div style="margin-top:15px; margin-bottom:15px">
-                                @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger form-control" })
                             </div>
                             <button type="submit" class="btn btn-success btn-block" style=" text-decoration:none; color: white">Save</button>
                         </form>
+                        <br />
                         <a class="btn btn-secondary btn-block" style="text-decoration:none; color: white" asp-action="Admins">Close</a>
                     </div>
                 </div>

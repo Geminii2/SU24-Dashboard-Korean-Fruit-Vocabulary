@@ -4,7 +4,7 @@
 }
 <style>
     div.dataTables_filter input {
-        width: 1230px !important;
+        width: 1200px !important;
     }
 </style>
 <!-- Page Heading -->
@@ -28,6 +28,7 @@
                                 <th class="text-center">Email</th>
                                 <th class="text-center">Gender</th>
                                 <th class="text-center">BirthDay</th>
+                                <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -107,13 +108,30 @@
                     },
                     { "data": "dob" },
                     {
+                        "data": "status",
+                        "render": function (data, type, row) {
+                            if (row.status == 1 || row.status == 2) return '<i class="fa fa-smile-o text-success" aria-hidden="true" ></i>';
+                            else if (row.status == 3) return '<i class="fa fa-frown-o text-danger" aria-hidden="true"></i>';
+                            else return `<p${row.status}</p>`;
+                        },
+                        "className": "text-center",
+                    },
+                    {
+
                         "data": null,
                         "render": function (data, type, row) {
-                            return '<div class="text-center action-buttons">' +
-                                '<a href="/Account/EditAdmin?id=' + data.id + '" class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                                '<a href="/Account/DetailAdmin?id=' + data.id + '"class="btn btn-success btn-square px-3" style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
-                                '<a href="#" data-toggle="modal" data-target="#deleteModal" data-account-id="' + data.id + '" class="btn btn-danger btn-square delete-link"><i class="fa fa-times" aria-hidden="true"></i></a>'
-                                + '</div>';
+                            if (data.status == 3)
+                                return '<div class="text-center action-buttons">' +
+                                    '<a href="/Account/EditAdmin?id=' + data.id + '" class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                                    '<a href="/Account/DetailAdmin?id=' + data.id + '"class="btn btn-primary btn-square px-3" style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
+                                    '<a href="#" data-toggle="modal" data-target="#deleteModal" data-account-id="' + data.id + '" class="btn btn-danger btn-square delete-link" style="pointer-events: none;"><i class="fa fa-times" aria-hidden="true"></i></a>'
+                                    + '</div>';
+                            else
+                                return '<div class="text-center action-buttons">' +
+                                    '<a href="/Account/EditAdmin?id=' + data.id + '" class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                                    '<a href="/Account/DetailAdmin?id=' + data.id + '"class="btn btn-primary btn-square px-3" style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
+                                    '<a href="#" data-toggle="modal" data-target="#deleteModal" data-account-id="' + data.id + '" class="btn btn-danger btn-square delete-link"><i class="fa fa-times" aria-hidden="true"></i></a>'
+                                    + '</div>';
                         }
                     }
 

@@ -103,19 +103,48 @@
                             </select>
 
                             <span class="ml-3" for="typeSelect">Type:</span>
-                            <select id="typeSelect" onchange="fetchData()">
-                                <option value="month">Month</option>
-                                <option value="quarter">Quarter</option>
-                            </select>
-
-                            <span class="ml-3" for="yearSelect">Year:</span>
-                            <select id="yearSelect" onchange="updateYearSelect()">
-                                <option value="2023">2023</option>
-                                <option value="2024">2024</option>
+                            <select id="typeSelect" onchange="updateTypeSelect()">
+                                <option value="year">Year</option>
                                 <option value="custom">Custom</option>
                             </select>
-                            <input type="number" id="customYear" style="display:none;" placeholder="Input year" onchange="fetchData()">
-                            <span class="text-danger" id="checkCustomYear"> </span>
+
+                            <div class="d-inline-block" id="yearType" style="display:none">
+                                <span class="ml-3">Year</span>
+                                <select id="yearSelect" onchange="updateYearSelect()">
+                                    <option value="all">All years</option>
+                                    <option value="2year">The last 2 years</option>
+                                    <option value="custom">Custom</option>
+                                </select>
+                            </div>
+
+                            <div id="customYear" style="display:none">
+                                <span class="ml-3" for="start-date">Start year:</span>
+                                <input type="number" id="start-year" name="start-date" >
+                                <span class="text-danger" id="checkStarYear"></span>
+
+                                <span class="ml-3" for="end-date">End year:</span>
+                                <input type="number" id="end-year" name="end-date" >
+                                <span class="text-danger" id="checkEndYear"></span>
+
+                                <input type="submit" value="Submit" onclick="fetchData()" />
+                            </div>
+                            <br />
+                            <span class="text-danger" id="checkCustomYear"></span>
+
+                            <div id="customType" style="display:none">
+                                <span class="ml-3" for="start-date">Start date:</span>
+                                <input type="date" id="start-date" name="start-date" >
+
+                                <span class="ml-3" for="end-date">End date:</span>
+                                <input type="date" id="end-date" name="end-date" >
+
+                                <input type="submit" value="Submit" onclick="fetchData()" />
+
+                            </div>
+                            <br />
+                            <span class="text-danger" id="checkCustomType"></span>
+
+
 
                             <canvas id="myChart" style="border:none;"></canvas>
                         </div>
@@ -127,18 +156,40 @@
     </main>
 </div>
 
-<script src="~/js/chart/ageChart1.js"></script>
+<script src="~/js/chart/ageChart2.js"></script>
 <script>
+    function updateTypeSelect() {
+        const typeSelect = document.getElementById('typeSelect').value;
+        const yearType = document.getElementById('yearType');
+        const customType = document.getElementById('customType');
+        const customYear = document.getElementById('customYear');
+
+        if (typeSelect === 'custom') {
+            customType.className = "d-inline-block";
+            yearType.className = "";
+            customYear.className = "";
+            document.getElementById('checkCustomYear').innerHTML = '';
+        } else {
+            customType.className = "";
+            document.getElementById('checkCustomType').innerHTML = '';
+            yearType.className = "d-inline-block";
+
+            //fetchData();
+        }
+
+    }
     function updateYearSelect() {
         const yearSelect = document.getElementById('yearSelect').value;
         const customYear = document.getElementById('customYear');
         if (yearSelect === 'custom') {
             customYear.className = "d-inline-block";
-
+            document.getElementById('checkCustomType').innerHTML = '';
         } else {
             customYear.className = "";
-            document.getElementById('checkCustomYear').innerHTML = "";
+            document.getElementById('checkCustomYear').innerHTML = '';
             fetchData();
         }
     }
+
+    
 </script>

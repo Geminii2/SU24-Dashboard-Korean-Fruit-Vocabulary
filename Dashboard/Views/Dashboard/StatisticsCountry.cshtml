@@ -93,20 +93,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="text-center">
-                            <h3>Number of Users by Age and Gender</h3>
-
-                            <span for="ageSelect">Age:</span>
-                            <select id="ageSelect" onchange="fetchData()">
-                                <option value="0-99">All</option>
-                                <option value="0-10">Less 10</option>
-                                <option value="20-99">More 20</option>
-                            </select>
-
-                            <span class="ml-3" for="typeSelect">Type:</span>
-                            <select id="typeSelect" onchange="fetchData()">
-                                <option value="month">Month</option>
-                                <option value="quarter">Quarter</option>
-                            </select>
+                            <h3>Number of Users by Country</h3>
 
                             <span class="ml-3" for="yearSelect">Year:</span>
                             <select id="yearSelect" onchange="updateYearSelect()">
@@ -115,7 +102,7 @@
                                 <option value="custom">Custom</option>
                             </select>
                             <input type="number" id="customYear" style="display:none;" placeholder="Input year" onchange="fetchData()">
-                            <span class="text-danger" id="checkCustomYear"> </span>
+                            <span class="text-danger" id="checkCustomYear"></span>
 
                             <canvas id="myChart" style="border:none;"></canvas>
                         </div>
@@ -127,7 +114,8 @@
     </main>
 </div>
 
-<script src="~/js/chart/ageChart1.js"></script>
+@* <script src="~/js/AgeChart.js"></script> *@
+<script src="~/js/chart/countryChart.js"></script>
 <script>
     function updateYearSelect() {
         const yearSelect = document.getElementById('yearSelect').value;
@@ -141,4 +129,6 @@
             fetchData();
         }
     }
+
+
 </script>

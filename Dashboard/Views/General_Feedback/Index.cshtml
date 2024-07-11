@@ -4,7 +4,7 @@
 }
 <style>
     div.dataTables_filter input {
-        width: 1230px !important;
+        width: 1200px !important;
     }
 </style>
 <!-- Page Heading -->
@@ -81,10 +81,16 @@
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            return '<div class="text-center action-buttons">' +
-                                '<a href="/General_Feedback/Detail?id=' + data.id + '"class="btn btn-success btn-square px-3 " style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
-                                '<a href="/General_Feedback/Reply?id=' + data.id + '" class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                                '</div>';
+                            if (data.status == 1)
+                                return '<div class="text-center action-buttons">' +
+                                    '<a href="/General_Feedback/Reply?id=' + data.id + '" class="btn btn-warning btn-square " style="margin-right: 8px"><i class="fa fa-reply" aria-hidden="true"></i></a>' +
+                                    '<a href="/General_Feedback/Detail?id=' + data.id + '"class="btn btn-primary btn-square px-3 " style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
+                                    '</div>';
+                            else
+                                return '<div class="text-center action-buttons">' +
+                                    '<a href="/General_Feedback/Reply?id=' + data.id + '" class="btn btn-warning btn-square " style="margin-right: 8px; pointer-events: none;"><i class="fa fa-reply" aria-hidden="true"></i></a>' +
+                                    '<a href="/General_Feedback/Detail?id=' + data.id + '"class="btn btn-primary btn-square px-3 " style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
+                                    '</div>';
                         }
                     }
 

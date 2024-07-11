@@ -6,7 +6,7 @@
 }
 <style>
     div.dataTables_filter input {
-        width: 1230px !important;
+        width: 1200px !important;
     }
 </style>
 <!-- Page Heading -->
@@ -112,7 +112,7 @@
                         "render": function (data, type, row) {
                             return '<div class="text-center action-buttons">' +
                                 '<a href="/Vocabulary/Edit?id=' + data.id + '" class="btn btn-success btn-square " style="margin-right: 8px"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                                '<a href="/Vocabulary/Detail?id=' + data.id + '"class="btn btn-success btn-square px-3 " style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
+                                '<a href="/Vocabulary/Detail?id=' + data.id + '"class="btn btn-primary btn-square px-3 " style="margin-right: 8px"><i class="fa fa-info" aria-hidden="true"></i></a>' +
                                 '<a href="#" data-toggle="modal" data-target="#deleteModal" data-voca-id="' + data.id + '" class="btn btn-danger btn-square delete-link"><i class="fa fa-times" aria-hidden="true"></i></a>'
                                 + '</div>';
                         }

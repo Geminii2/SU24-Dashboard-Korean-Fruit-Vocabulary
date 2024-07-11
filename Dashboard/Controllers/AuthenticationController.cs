@@ -33,46 +33,46 @@ namespace Dashboard.Controllers
             try
             {
 
-                if (ModelState.IsValid)
+                var loggedInAccount = await _accRepository.GetByEmail(account.Email);
+
+                var isValidCredentials = await _accRepository.Login(account.Email, account.Pwd);
+
+                if (isValidCredentials)
                 {
-                    var loggedInAccount = await _accRepository.GetByEmail(account.Email);
+                    loggedInAccount = await _accRepository.GetByEmail(account.Email);
 
-                    var isValidCredentials = await _accRepository.Login(account.Email, account.Pwd);
+                    // Set a cookie to store the user ID (log the user in)
+                    HttpContext.Session.SetInt32("Id", loggedInAccount.Id);
+                    HttpContext.Session.SetString("AvatarImg", loggedInAccount.Avatar_img);
+                    HttpContext.Session.SetString("Fullname", loggedInAccount.Fullname);
+                    HttpContext.Session.SetInt32("RoleID", loggedInAccount.Role_id);
 
-                    if (isValidCredentials)
+                    if (loggedInAccount.Email != null)
                     {
-                        loggedInAccount = await _accRepository.GetByEmail(account.Email);
-
-                        // Set a cookie to store the user ID (log the user in)
-                        HttpContext.Session.SetInt32("Id", loggedInAccount.Id);
-                        HttpContext.Session.SetString("AvatarImg", loggedInAccount.Avatar_img);
-                        HttpContext.Session.SetString("Fullname", loggedInAccount.Fullname);
-                        HttpContext.Session.SetInt32("RoleID", loggedInAccount.Role_id);
-
-                        if (loggedInAccount.Email != null)
-                        {
-                            return RedirectToAction("Index", "Dashboard");
-                        }
-                        else if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                        {
-                            return Redirect(returnUrl);
-                        }
-
                         return RedirectToAction("Index", "Dashboard");
                     }
+                    else if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
 
-                    ModelState.AddModelError("", "Invalid email or password");
+                    return RedirectToAction("Index", "Dashboard");
                 }
+
+                ViewData["Invalid"]="Invalid email or password";
+
             }
             catch (HttpRequestException ex)
             {
-                ModelState.AddModelError("", $"HttpRequestException: {ex.Message}");
+                //ModelState.AddModelError("", $"HttpRequestException: {ex.Message}");
+                return View("Error");
                 // Log or handle the exception
                 //Console.WriteLine($"HttpRequestException: {ex.Message}");
             }
             catch (SocketException ex)
             {
-                ModelState.AddModelError("", $"SocketException: {ex.Message}");
+                //ModelState.AddModelError("", $"SocketException: {ex.Message}");
+                return View("Error");
                 // Log or handle the exception
                 //Console.WriteLine($"SocketException: {ex.Message}");
             }

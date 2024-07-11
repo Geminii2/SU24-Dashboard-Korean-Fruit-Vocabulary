@@ -11,7 +11,7 @@ namespace Repository.VocabularyRepo
 {
     public class VocabularyRepository : IVocabularyRepository
     {
-        public async Task<IEnumerable<Vocabulary>> GetAll()=> await VocabularyDAO.GetInstance.GetAll();
+        public async Task<IEnumerable<Vocabulary>> GetAll() => await VocabularyDAO.GetInstance.GetAll();
         public async Task<Vocabulary> GetById(int id) => await VocabularyDAO.GetInstance.GetById(id);
         public async Task<int> GenerateNewId() => await VocabularyDAO.GetInstance.IncreaseId();
         public async Task AddVoca(Vocabulary voca) => await VocabularyDAO.GetInstance.SaveData(voca);
@@ -27,5 +27,8 @@ namespace Repository.VocabularyRepo
        => await VocabularyDAO.GetInstance.AddVoiceEng(id, name, voiceEngFile);
         public async Task<string> AddVoiceKor(int id, string name, IFormFile voiceKorFile)
        => await VocabularyDAO.GetInstance.AddVoiceKor(id, name, voiceKorFile);
+
+        public async Task<(List<string> labels, List<string> totals)> GetTopIncorrectVocabularies()
+        => await VocabularyDAO.GetInstance.GetTopIncorrectVocabularies();
     }
 }

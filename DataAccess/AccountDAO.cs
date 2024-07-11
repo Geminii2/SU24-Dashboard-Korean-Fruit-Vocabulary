@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Sockets;
@@ -63,7 +64,7 @@ namespace DataAccess
             string databaseURL = dtb + id + ".json";
             return await localDAO.GetById<Account>(databaseURL);
         }
-        
+
         public async Task<int> IncreaseId()
         {
             string databaseURL = dtbad + ".json";
@@ -75,7 +76,7 @@ namespace DataAccess
             string databaseURL = dtb + acc.Id + ".json";
             await localDAO.SaveData(databaseURL, acc);
         }
-        
+
         public async Task DeleteData(Account acc)
         {
             string databaseURL = dtb + acc.Id + ".json";
@@ -183,14 +184,14 @@ namespace DataAccess
         }
         public void Logout(HttpContext httpContext)
         {
-          httpContext.Session.Clear();
+            httpContext.Session.Clear();
         }
 
         public async Task<List<Admin>> GetAllAdmin()
         {
             string databaseURL = dtbad + ".json";
             List<Admin> admins = await localDAO.GetAll<Admin>(databaseURL);
-            var admin = admins.Where(ad=> ad.Role_id == 2).ToList();
+            var admin = admins.Where(ad => ad.Role_id == 2).ToList();
             return admin;
         }
         public async Task<Admin> GetAdminById(int id)
@@ -235,6 +236,225 @@ namespace DataAccess
                 // Handle Firebase Authentication exception as needed
             }
         }
-        
+
+
+        public async Task<List<StatisticsItem>> CountAccountbyAge(int year, string ageRange)
+        {
+            var accounts = await GetAll();
+
+            var minAge = int.Parse(ageRange.Split('-')[0]);
+            var maxAge = int.Parse(ageRange.Split('-')[1]);
+
+            var startDate = new DateTime(year, 1, 1);
+            var endDate = new DateTime(year, 12, 31);
+
+            var statistics = new List<StatisticsItem>();
+            for (int i = 1; i<=12; i++)
+            {
+                statistics.Add(new StatisticsItem
+                {
+                    Label = i.ToString(),
+                    Total = 0,
+                    Female = 0,
+                    Male=0
+                });
+            }
+            foreach (var account in accounts)
+            {
+                var dob = new DateTime();
+                if (account.Dob != null && account.Dob != "")
+                {
+                    dob = DateTime.ParseExact(account.Dob, "dd-MM-yyyy", null);
+                }
+                //var createdDate = DateTime.ParseExact(account.Created_date, "dd-MM-yyyy", null);
+                var createdDate = new DateTime();
+                if (account.Created_date != null && account.Created_date != "")
+                {
+                    createdDate = DateTime.ParseExact(account.Created_date, "dd-MM-yyyy", null);
+                }
+
+                if (createdDate >= startDate && createdDate <= endDate)
+                {
+                    var age = CalculateAge(dob, startDate);
+                    if (age >= minAge && age <= maxAge)
+                    {
+                        var month = createdDate.Month;
+                        var statItem = statistics.FirstOrDefault(s => s.Label == month.ToString());
+                        if (statItem != null)
+                        {
+                            // Cập nhật số liệu
+                            statItem.Total++;
+                            if (account.Gender == "Male")
+                                statItem.Male++;
+                            else if (account.Gender == "Female")
+                                statItem.Female++;
+                        }
+                    }
+                }
+            }
+            return statistics;
+        }
+
+        public int CalculateAge(DateTime birthDate, DateTime referenceDate)
+        {
+            int age = referenceDate.Year - birthDate.Year;
+            return age;
+        }
+
+
+        public async Task<List<StatisticsItem>> CountAgebyYear(string ageRange, string startDate, string endDate)
+        {
+            var accounts = await GetAll();
+
+            var minAge = int.Parse(ageRange.Split('-')[0]);
+            var maxAge = int.Parse(ageRange.Split('-')[1]);
+
+            var start = DateTime.Parse(startDate);
+            var end = DateTime.Parse(endDate);
+
+            var statistics = new List<StatisticsItem>();
+            for (int i = start.Year; i<=end.Year; i++)
+            {
+                statistics.Add(new StatisticsItem
+                {
+                    Label = i.ToString(),
+                    Total = 0,
+                    Female = 0,
+                    Male=0
+                });
+            }
+            foreach (var account in accounts)
+            {
+                var dob = new DateTime();
+                if (account.Dob != null && account.Dob != "")
+                {
+                    dob = DateTime.ParseExact(account.Dob, "dd-MM-yyyy", null);
+                }
+                //var createdDate = DateTime.ParseExact(account.Created_date, "dd-MM-yyyy", null);
+                var createdDate = new DateTime();
+                if (account.Created_date != null && account.Created_date != "")
+                {
+                    createdDate = DateTime.Parse(account.Created_date);
+                }
+
+                if (createdDate >= start && createdDate <= end)
+                {
+                    var age = CalculateAge(dob, start);
+                    if (age >= minAge && age <= maxAge)
+                    {
+                        var year = createdDate.Year;
+                        var statItem = statistics.FirstOrDefault(s => s.Label == year.ToString());
+                        if (statItem != null)
+                        {
+                            // Cập nhật số liệu
+                            statItem.Total++;
+                            if (account.Gender == "Male")
+                                statItem.Male++;
+                            else if (account.Gender == "Female")
+                                statItem.Female++;
+                        }
+                    }
+                }
+            }
+            return statistics;
+        }
+
+        public async Task<StatisticsItem> CountAgebyCustom(string ageRange, string startDate, string endDate)
+        {
+            var accounts = await GetAll();
+
+            var minAge = int.Parse(ageRange.Split('-')[0]);
+            var maxAge = int.Parse(ageRange.Split('-')[1]);
+
+            var start = DateTime.Parse(startDate);
+            var end = DateTime.Parse(endDate);
+
+            var statistics = new StatisticsItem();
+            //for (var i = start.Year; i<=end.Year; i++)
+            //{
+            //    statistics.Add(new StatisticsItem
+            //    {
+            //        Label = i.ToString(),
+            //        Total = 0,
+            //        Female = 0,
+            //        Male=0
+            //    });
+            //}
+            foreach (var account in accounts)
+            {
+                var dob = new DateTime();
+                if (account.Dob != null && account.Dob != "")
+                {
+                    dob = DateTime.ParseExact(account.Dob, "dd-MM-yyyy", null);
+                }
+                //var createdDate = DateTime.ParseExact(account.Created_date, "dd-MM-yyyy", null);
+                var createdDate = new DateTime();
+                if (account.Created_date != null && account.Created_date != "")
+                {
+                    createdDate = DateTime.Parse(account.Created_date);
+                }
+
+                if (createdDate >= start && createdDate <= end)
+                {
+                    var age = CalculateAge(dob, start);
+                    if (age >= minAge && age <= maxAge)
+                    {
+                        statistics.Total++;
+                        if (account.Gender == "Male")
+                            statistics.Male++;
+                        else if (account.Gender == "Female")
+                            statistics.Female++;
+
+
+                        //var date = createdDate;
+                        //var statItem = statistics.FirstOrDefault(s => s.Label == date.ToString());
+                        //if (statItem != null)
+                        //{
+                        //    // Cập nhật số liệu
+                        //    statItem.Total++;
+                        //    if (account.Gender == "Male")
+                        //        statItem.Male++;
+                        //    else if (account.Gender == "Female")
+                        //        statItem.Female++;
+                        //}
+                    }
+                }
+            }
+            return statistics;
+        }
+
+
+        public async Task<List<CountryCount>> CountCountry(int year)
+        {
+            var accounts = await GetAll();
+
+            var countryCounts = accounts.Where(a => a.Created_date != null && IsInDateRange(a.Created_date, year))
+                .GroupBy(a => a.Country).Select(g => new CountryCount
+                {
+                    Country = g.Key,
+                    UserCount = g.Count()
+                }).OrderByDescending(c => c.UserCount).ToList();
+
+
+            return countryCounts;
+
+        }
+
+        private bool IsInDateRange(string createdDate, int year)
+        {
+            DateTime startDate = new DateTime(year, 1, 1);
+            DateTime endDate = new DateTime(year, 12, 31);
+            var date = new DateTime();
+
+            if (createdDate!= null || createdDate!="")
+            {
+                date = DateTime.ParseExact(createdDate, "dd-MM-yyyy", null);
+            }
+            if (date >= startDate && date <= endDate)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

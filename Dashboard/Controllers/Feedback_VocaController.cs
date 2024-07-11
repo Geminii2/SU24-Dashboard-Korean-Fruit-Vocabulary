@@ -38,8 +38,8 @@ namespace Dashboard.Controllers
                 var list = obj.Select(item => new
                 {
                     id = item.Id,
-                    email = account.FirstOrDefault(e=> e.Id== item.Account_Id)?.Email,
-                    vocabulary = voca.FirstOrDefault(v=> v.Id == item.Vocabulary_Id)?.English,
+                    email = account.FirstOrDefault(e => e.Id== item.Account_Id)?.Email,
+                    vocabulary = voca.FirstOrDefault(v => v.Id == item.Vocabulary_Id)?.English,
                     description = item.Description,
                     created = item.Created_date,
                     status = item.Status,
@@ -55,10 +55,10 @@ namespace Dashboard.Controllers
         public async Task<IActionResult> Index()
         {
             var accID = HttpContext.Session.GetInt32("Id");
-            //if (accID == null)
-            //{
-            //    return RedirectToAction("Login", "Authentication");
-            //}
+            if (accID == null)
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
 
             var feedback_Vocas = await _feedback_VocaRepository.GetAll();
             return View(feedback_Vocas);
@@ -109,17 +109,22 @@ namespace Dashboard.Controllers
             return View(fb_voca);
         }
         [HttpPost]
-        public async Task<IActionResult> Reply(string id ,string email, string name, string title, string body)
+        public async Task<IActionResult> Reply(string id, string email, string name, string title, string body)
         {
+            var accID = HttpContext.Session.GetInt32("Id");
+            if (accID == null)
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
+
+            await SendMail(email, name, title, body);
+
             var fb_voca = await _feedback_VocaRepository.GetById(id);
             fb_voca.Status=2;
             await _feedback_VocaRepository.UpdateVoca(fb_voca);
-            await SendMail(email, name, title, body);
-            
-
             return RedirectToAction("Index");
         }
-        
+
         public async Task<bool> SendMail(string ReceiverEmail, string ReceiverName, string Title, string Body)
         {
             using (MimeMessage emailMessage = new MimeMessage())
