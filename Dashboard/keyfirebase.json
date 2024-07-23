@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "su24-sep490-koreandictionary",
+  "private_key_id": "72f635f78bf88b6267ba353bd014e82c5b39554f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCwYtDPFqoprWtF\nxv4/x3EVF0PZVXvtSfUOk3yCBIZzLVQm/Eeqy98rK+TDKULIVvpwPDw8LI3jD6uo\ndXb7/slwoD327CHZj9YTXUqXEIoQ3KFE3iM7HyyOgkhp/k+zFW2J+ZZAsSPkod6w\nUB7NCNegbtFcV4AYdeIXKXFfuc0SZe/sC5yDTeefo+IrNGgLf2l6iLtSFoSYsQDo\nTgo+niuXoyNhnI353ccOVmR9poBIo7zW1dwSc8ZnEh3doygXn5OKR4NWo1bJUR5J\nTMAGNodvxAvMBkvOHrgUJtmSJGNGbCffx0bGj/VfWoaqKNixYqqk4RjSzVTZ6hyt\nDyQnw6ZnAgMBAAECggEALIHywJ6ud2/MBsJsu3k+/pxtQXUBnWGxFWl/3Gr55ixE\n9MVp7B4fhQxBYEGUGWthLFr2tBRmBSqaHRru2C11dRbqK9lvvS8/TImY3b+Npy2V\nAASxjSSToK4dSamjQMQibNNu54oLTZDO2VyOORyHFHOCHrPxnbp5P3D0q7v9lCt7\neUABOWR/PHu++rMnAj1LiVLIvDiZvlTxQfi/pvZEZXPXNL2xyLqB+laqAb3YFTSD\nrilQm6AzAvnPtLXv6N5fPnZBme2dp1cdl7Dzqn02ra0dn/DXjSCGK6m72qbEBvwU\nSRGc+oaqnXe67fO/WC2kEV6B4AxH0qfYEJqGYDtdMQKBgQDYog/ydfonEL9ZNTmV\nJFkx0mdcWD/Bms82ncy8QEdSoPE6bHits2WQpQm40xF+B+ar0uHN2nTZpXvlKWAK\n5m9d4vr8UIwN1tr0kdf4yZt0dxtlEX0OmacMjgeXvR6ZioVZ8rrdUhDXzIVVwLsw\nZ7NxZJNFpcwiwc7znC498i/xzwKBgQDQcG3XM8zkcS+fmhIEnroi7zIyhBrgTBgS\nKwSNux/a/vU1b/qc0glkg7L9rOgMcDE7ww82OJo+5Idla0cFXunFl9txHbnp1gMZ\nEArTGnknZEgwIdRveGzoEKR9QWwqRhv5u7q4jtWSUy/2UsMiwTWLKHSJpo3+BNqE\nt/sPvz+f6QKBgFKJ3N2aicccoGtS1i+2+6z555vNm+0eGNlMYldPfl1DKOYDsi8s\nbQQhfYTIFqAYTpEk9hfCpkbOwFfd3dQJXGE/PDWqUtJrDF2mu8z0s6A6SVvGwAky\nDe3Ap6/uxJvnpUtSKlRtEjHGoP69QhT9TedkVKByvUZ45Wr4FL5RamcNAoGBAIv+\nxzdf+kCAaN0ITQu/VAM8pnlZUvfNA+nH7MIIqWecEDN451jGlTpmXiSVKjGYdOjP\npPrk32xYbzvF5qiLy/VDfkamEYUlkWUW6j5JLJAxgW6aeiT4PCVNcD0UYMKv3gBI\nfyuP+4/QwYjuo1NHc1/opwUA0aOHvQCg1UYJTIFpAoGASctpGW02un87rAaKzHL7\n/rVoaWFX9Yn+qIhUhCUo2cjyyOBgOFPCfuoAUBq2KMIP7AVDtk11fJHNAyR7m3Eh\n4MMIphUjfvG4Wgosmr75Cm2k0GkRdLWo1n65IFcSdqWwjLmUhEygv+MDUcNYaDuD\nvWDlrIgTwoWm+xNNmpqL7NQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-2b7ga@su24-sep490-koreandictionary.iam.gserviceaccount.com",
+  "client_id": "101714950601273353749",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-2b7ga%40su24-sep490-koreandictionary.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

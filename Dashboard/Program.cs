@@ -31,7 +31,7 @@ builder.Services.AddSession(options =>
 });
 FirebaseApp.Create(new AppOptions()
 {
-    Credential = GoogleCredential.FromFile("key.json")
+    Credential = GoogleCredential.FromFile("keyfirebase.json")
 });
 
 
