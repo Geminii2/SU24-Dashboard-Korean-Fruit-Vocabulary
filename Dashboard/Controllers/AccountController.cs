@@ -176,52 +176,52 @@ namespace Dashboard.Controllers
             int newid = await _accRepository.GenerateNewId();
             //Random password
             string password = "123456";
-            if (ModelState.IsValid)
+            //if (!ModelState.IsValid)
+            //{
+            try
             {
-                try
+                // Check Email has existed
+                bool isEmailInUse = await _accRepository.CheckExisted(ad.Email);
+                if (isEmailInUse)
                 {
-                    // Check Email has existed
-                    bool isEmailInUse = await _accRepository.CheckExisted(ad.Email);
-                    if (isEmailInUse)
-                    {
-                        //ModelState.AddModelError("", "This email is already registered.");
-                        ViewData["isEmail"] = "This email is already registered.";
-                        return View(ad);
-                    }
-                    // Create a new user with email and password
-                    var user = await FirebaseAuth.DefaultInstance.CreateUserAsync(new UserRecordArgs()
-                    {
-                        Email = ad.Email,
-                        Password = password, // Use the entered password for user creation
-                    });
+                    //ModelState.AddModelError("", "This email is already registered.");
+                    ViewData["isEmail"] = "This email is already registered.";
+                    return View(ad);
+                }
+                // Create a new user with email and password
+                var user = await FirebaseAuth.DefaultInstance.CreateUserAsync(new UserRecordArgs()
+                {
+                    Email = ad.Email,
+                    Password = password, // Use the entered password for user creation
+                });
 
-                    Admin admin = new Admin(newid, ad.Email, password, ad.Fullname);
-                    await _accRepository.AddAdmin(admin);
-                    //Send Mail
-                    await SendMail(ad.Email, ad.Fullname, password);
+                Admin admin = new Admin(newid, ad.Email, password, ad.Fullname);
+                await _accRepository.AddAdmin(admin);
+                //Send Mail
+                await SendMail(ad.Email, ad.Fullname, password);
 
-                    return RedirectToAction("Admins");
-                }
-                catch (Firebase.Auth.FirebaseAuthException ex)
-                {
-                    //ModelState.AddModelError("", "An error occurred during registration.");
-                    return View("Error");
-                }
-                catch (HttpRequestException ex)
-                {
-                    //ModelState.AddModelError("", $"HttpRequestException: {ex.Message}");
-                    return View("Error");
-                    // Log or handle the exception
-                    //Console.WriteLine($"HttpRequestException: {ex.Message}");
-                }
-                catch (SocketException ex)
-                {
-                    //ModelState.AddModelError("", $"SocketException: {ex.Message}");
-                    return View("Error");
-                    // Log or handle the exception
-                    //Console.WriteLine($"SocketException: {ex.Message}");
-                }
+                return RedirectToAction("Admins");
             }
+            catch (Firebase.Auth.FirebaseAuthException ex)
+            {
+                //ModelState.AddModelError("", "An error occurred during registration.");
+                return View("Error");
+            }
+            catch (HttpRequestException ex)
+            {
+                //ModelState.AddModelError("", $"HttpRequestException: {ex.Message}");
+                return View("Error");
+                // Log or handle the exception
+                //Console.WriteLine($"HttpRequestException: {ex.Message}");
+            }
+            catch (SocketException ex)
+            {
+                //ModelState.AddModelError("", $"SocketException: {ex.Message}");
+                return View("Error");
+                // Log or handle the exception
+                //Console.WriteLine($"SocketException: {ex.Message}");
+            }
+            //}
             return View(ad);
         }
 
@@ -430,7 +430,17 @@ namespace Dashboard.Controllers
         public async Task<bool> SendMail(string ReceiverEmail, string ReceiverName, string pwd)
         {
             string Title = "New Account";
-            string Body = $"TK: {ReceiverEmail} /n MK: {pwd}";
+            string Body = $@"
+                          <h1>Welcome to Our Service</h1>
+                          <p>Dear {ReceiverName},</p>
+                          <p>We are excited to inform you that your new account has been created successfully.</p>
+                          <p><strong>Account Information:</strong></p>
+                          <ul>
+                              <li>Email: {ReceiverEmail}</li>
+                              <li>Password: {pwd}</li>
+                          </ul>
+                          <p>Thank you for joining us!</p>
+                         <p>Best regards,<br/>The Team</p>";
 
 
             using (MimeMessage emailMessage = new MimeMessage())
@@ -448,7 +458,7 @@ namespace Dashboard.Controllers
                 emailMessage.Subject = Title;
                 //Tạo đối tượng chứa nội dung mail
                 BodyBuilder emailBodyBuilder = new BodyBuilder();
-                emailBodyBuilder.TextBody = Body;
+                emailBodyBuilder.HtmlBody = Body;
                 //Gán nội dung mail vào mimemessage
                 emailMessage.Body = emailBodyBuilder.ToMessageBody();
                 //tạo đối tượng SmtpClient từ Mailkit.Net.Smtp namespace, không dùng  System.Net.Mail nhé
