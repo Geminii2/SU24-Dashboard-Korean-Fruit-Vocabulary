@@ -172,7 +172,7 @@ namespace DataAccess
             try
             {
                 // Use Firebase Authentication to check if the email is in use
-                var user = await GetAccountByEmail(email);
+                var user = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(email);
 
                 // If a user with this email exists, return true
                 return user != null;

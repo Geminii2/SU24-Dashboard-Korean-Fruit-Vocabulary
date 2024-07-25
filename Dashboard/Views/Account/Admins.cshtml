@@ -101,8 +101,8 @@
                         "data": "gender",
                         "render": function (data, type, row) {
                             if (row.gender == "Male") return '<i class="fa fa-mars" style="color:blue" > </i>';
-                            if (row.gender == "Female") return '<i class="fa fa-venus" style="color:pink"> </i>';
-                            if (row.gender == null) return row.gender;
+                            else if (row.gender == "Female") return '<i class="fa fa-venus" style="color:pink"> </i>';
+                            else  return row.gender;
                         },
                         "className": "text-center"
                     },

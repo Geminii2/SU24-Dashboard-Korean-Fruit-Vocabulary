@@ -18,7 +18,7 @@ namespace BusinessObject.Models
             Pwd = _Pwd;
             Role_id = 2;
             Fullname= _Fullname;
-            Avatar_img = "";
+            Avatar_img = "https://firebasestorage.googleapis.com/v0/b/su24-sep490-koreandictionary.appspot.com/o/Avatar_img%2Fbo-2.png?alt=media&token=04bf3aa0-c2d1-4141-b0b0-36f384b1f98e";
             Dob= "";
             Country="";
             Gender ="";
