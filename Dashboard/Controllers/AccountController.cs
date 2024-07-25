@@ -222,7 +222,7 @@ namespace Dashboard.Controllers
                 //Console.WriteLine($"SocketException: {ex.Message}");
             }
             //}
-            return View(ad);
+            //return View(ad);
         }
 
         public async Task<IActionResult> DetailAdmin(int id)
@@ -242,7 +242,6 @@ namespace Dashboard.Controllers
                     ViewData["AvatarImg"] = acc.Avatar_img;
                     return View(acc);
                 }
-
                 return RedirectToAction("Index", "Account");
             }
             catch (Exception ex)

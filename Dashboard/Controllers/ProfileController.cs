@@ -58,7 +58,11 @@ namespace Dashboard.Controllers
                 }
 
                 var acc = await _accRepository.GetAdminById(id);
-                var date = DateTime.Parse(acc.Dob);
+                var date = new DateTime();
+                if (!String.IsNullOrEmpty(acc.Dob))
+                {
+                    date = DateTime.Parse(acc.Dob);
+                }
                 if (acc != null)
                 {
                     ViewData["AvatarImg"] = acc.Avatar_img;
