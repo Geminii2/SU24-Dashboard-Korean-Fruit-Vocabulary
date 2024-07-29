@@ -11,7 +11,9 @@ using Org.BouncyCastle.Asn1.Pkcs;
 using Repository.AccountRepo;
 using System.Globalization;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Security.Principal;
+using System.Text;
 
 namespace Dashboard.Controllers
 {
@@ -176,6 +178,7 @@ namespace Dashboard.Controllers
             int newid = await _accRepository.GenerateNewId();
             //Random password
             string password = "123456";
+            string md5pass = GetMD5(password);
             //if (!ModelState.IsValid)
             //{
             try
@@ -192,10 +195,10 @@ namespace Dashboard.Controllers
                 var user = await FirebaseAuth.DefaultInstance.CreateUserAsync(new UserRecordArgs()
                 {
                     Email = ad.Email,
-                    Password = password, // Use the entered password for user creation
+                    Password = md5pass, // Use the entered password for user creation
                 });
 
-                Admin admin = new Admin(newid, ad.Email, password, ad.Fullname);
+                Admin admin = new Admin(newid, ad.Email, md5pass, ad.Fullname);
                 await _accRepository.AddAdmin(admin);
                 //Send Mail
                 await SendMail(ad.Email, ad.Fullname, password);
@@ -258,10 +261,12 @@ namespace Dashboard.Controllers
             try
             {
                 string pwd = "123456";
+                string md5pass = GetMD5(pwd);
                 var obj = await _accRepository.GetAdminById(id);
                 if (obj != null)
                 {
-                    await _accRepository.UpdateFirebasePassword(obj.Email, pwd);
+                    await _accRepository.UpdateFirebasePassword(obj.Email, md5pass);
+                    obj.Pwd = md5pass;
                     await _accRepository.UpdateAdmin(obj);
                     await SendMail(obj.Email, obj.Fullname, pwd);
                     return RedirectToAction("Admins");
@@ -334,7 +339,7 @@ namespace Dashboard.Controllers
                 return View(account);
             }
 
-            if (account.Pwd != currentPassword)
+            if (account.Pwd != GetMD5(currentPassword))
             {
                 ModelState.AddModelError("", "Current password is incorrect.");
                 return View(account); // Redirect back to the change password page with an error message
@@ -346,9 +351,9 @@ namespace Dashboard.Controllers
                 ModelState.AddModelError("", "New password and confirm password do not match.");
                 return View(account); // Redirect back to the change password page with an error message
             }
-
-            account.Pwd = newPassword;
-            await _accRepository.UpdateFirebasePassword(account.Email, newPassword);
+            string md5pass = GetMD5(newPassword);
+            account.Pwd = md5pass;
+            await _accRepository.UpdateFirebasePassword(account.Email, md5pass);
             await _accRepository.UpdateAdmin(account);
             return RedirectToAction("Admins");
 
@@ -474,6 +479,22 @@ namespace Dashboard.Controllers
                 }
             }
             return true;
+        }
+
+        public string GetMD5(string pass)
+        {
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            byte[] bHash = md5.ComputeHash(Encoding.UTF8.GetBytes(pass));
+
+            StringBuilder sbHash = new StringBuilder();
+            foreach (byte b in bHash)
+            {
+
+                sbHash.Append(String.Format("{0:x2}", b));
+
+            }
+
+            return sbHash.ToString();
         }
     }
 }

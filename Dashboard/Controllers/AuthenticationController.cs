@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Repository.AccountRepo;
 using System.Net.Sockets;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Dashboard.Controllers
 {
@@ -34,8 +36,8 @@ namespace Dashboard.Controllers
             {
 
                 var loggedInAccount = await _accRepository.GetByEmail(account.Email);
-
-                var isValidCredentials = await _accRepository.Login(account.Email, account.Pwd);
+                string md5pass = GetMD5(account.Pwd);
+                var isValidCredentials = await _accRepository.Login(account.Email, md5pass);
 
                 if (isValidCredentials)
                 {
@@ -95,6 +97,22 @@ namespace Dashboard.Controllers
 
             // Redirect to the login page or another appropriate page
             return RedirectToAction("Login", "Authentication");
+        }
+
+        public string GetMD5(string pass)
+        {
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            byte[] bHash = md5.ComputeHash(Encoding.UTF8.GetBytes(pass));
+
+            StringBuilder sbHash = new StringBuilder();
+            foreach (byte b in bHash)
+            {
+
+                sbHash.Append(String.Format("{0:x2}", b));
+
+            }
+
+            return sbHash.ToString();
         }
     }
 }
