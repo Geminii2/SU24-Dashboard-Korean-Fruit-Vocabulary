@@ -56,6 +56,10 @@
                         </div>
                     </form>
                 </div>
+                    @if (Model.Status==2)
+                    {
+                        <a href="#" data-toggle="modal" data-target="#unbanModal" data-account-id="@Model.Id" class="btn btn-info" style="text-decoration:none; color: white; margin-bottom: 5px;">Unban Account</a>
+                    }
                     <a class="btn btn-secondary" style="text-decoration:none; color: white" asp-action="Index">Close</a>
                 </div>
             </div>
@@ -65,3 +69,26 @@
                 
     
 </div>
+
+<div class="modal fade" id="unbanModal" tabindex="-1" role="dialog" aria-labelledby="unbanModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unbanModalLabel">Confirm unban account</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Unban" below if you are ready to unban this element.</div>
+
+            <div class="modal-footer">
+                <form method="post" id="unbanForm" action="/Account/UnDelete">
+                    <input type="hidden" name="id" value="@Model.Id">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger" type="submit">Unban</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

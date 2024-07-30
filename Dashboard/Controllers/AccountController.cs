@@ -119,6 +119,31 @@ namespace Dashboard.Controllers
             }
 
         }
+        [HttpPost]
+        public async Task<IActionResult> UnDelete(int id)
+        {
+            try
+            {
+
+                var obj = await _accRepository.GetById(id);
+
+                if (obj != null)
+                {
+                    obj.Status = 1;
+
+                    await _accRepository.DeleteUser(obj);
+                    return RedirectToAction("Index");
+                }
+                return View("Error");
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error");
+            }
+
+        }
 
         [HttpGet]
         public async Task<JsonResult> GetDataAdmin()
@@ -267,6 +292,7 @@ namespace Dashboard.Controllers
                 {
                     await _accRepository.UpdateFirebasePassword(obj.Email, md5pass);
                     obj.Pwd = md5pass;
+                    obj.Status=1;
                     await _accRepository.UpdateAdmin(obj);
                     await SendMail(obj.Email, obj.Fullname, pwd);
                     return RedirectToAction("Admins");

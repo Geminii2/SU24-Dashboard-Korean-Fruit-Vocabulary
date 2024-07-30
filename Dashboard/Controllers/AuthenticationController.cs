@@ -37,6 +37,12 @@ namespace Dashboard.Controllers
 
                 var loggedInAccount = await _accRepository.GetByEmail(account.Email);
                 string md5pass = GetMD5(account.Pwd);
+                if (loggedInAccount.Status == 3)
+                {
+                    ViewData["isBaned"]= "The account is baned";
+                    return View();
+                }
+
                 var isValidCredentials = await _accRepository.Login(account.Email, md5pass);
 
                 if (isValidCredentials)
