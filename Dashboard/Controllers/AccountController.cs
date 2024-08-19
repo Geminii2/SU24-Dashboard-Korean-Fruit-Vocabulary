@@ -381,7 +381,7 @@ namespace Dashboard.Controllers
             account.Pwd = md5pass;
             await _accRepository.UpdateFirebasePassword(account.Email, md5pass);
             await _accRepository.UpdateAdmin(account);
-            return RedirectToAction("Admins");
+            return RedirectToAction("Index", "Dashboard");
 
         }
 
@@ -435,25 +435,24 @@ namespace Dashboard.Controllers
                 return RedirectToAction("Login", "Authentication");
             }
 
-            if (ModelState.IsValid)
+
+            var ad = await _accRepository.GetAdminById(admin.Id);
+
+            var acc = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(ad.Email);
+            await FirebaseAuth.DefaultInstance.DeleteUserAsync(acc.Uid);
+            ad.Email= admin.Email;
+            ad.Fullname= admin.Fullname;
+            ad.Pwd= admin.Pwd;
+            await FirebaseAuth.DefaultInstance.CreateUserAsync(new UserRecordArgs()
             {
-                var ad = await _accRepository.GetAdminById(admin.Id);
+                Email = ad.Email,
+                Password = pwd, // Use the entered password for user creation
+            });
 
-                var acc = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(ad.Email);
-                await FirebaseAuth.DefaultInstance.DeleteUserAsync(acc.Uid);
-                ad.Email= admin.Email;
-                ad.Fullname= admin.Fullname;
-                ad.Pwd= admin.Pwd;
-                await FirebaseAuth.DefaultInstance.CreateUserAsync(new UserRecordArgs()
-                {
-                    Email = ad.Email,
-                    Password = pwd, // Use the entered password for user creation
-                });
+            await _accRepository.UpdateAdmin(ad);
+            await SendMail(ad.Email, ad.Fullname, pwd);
 
-                await _accRepository.UpdateAdmin(ad);
-                await SendMail(ad.Email, ad.Fullname, pwd);
 
-            }
             return RedirectToAction("Admins");
         }
 
