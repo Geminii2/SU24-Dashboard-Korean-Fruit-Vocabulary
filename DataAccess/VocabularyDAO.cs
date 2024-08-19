@@ -144,6 +144,16 @@ namespace DataAccess
 
             var incorrectHistories = histories.Where(h => !h.Result).Select(h => h.Question_Id).ToList();
 
+            // kiểm tra lỗi trong data
+            //var missingQids = incorrectHistories
+            //.Where(qid => !questions.Any(q => q.Id == qid))
+            //.ToList();
+
+            //foreach (var qid in missingQids)
+            //{
+            //    Console.WriteLine($"Không tìm thấy câu hỏi với Id: {qid}");
+            //}
+
             var incorrectQuestionCounts = incorrectHistories.GroupBy(qid => questions.First(q => q.Id == qid).Vocabulary_Id)
                 .Select(group => new
                 {
